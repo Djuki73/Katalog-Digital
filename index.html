@@ -3,228 +3,370 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>yuDigital - Katalog Literasi Digital Terlengkap</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>yuDigital Indonesia - Katalog Masa Depan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.js"></script>
     <style>
-        html { scroll-behavior: smooth; }
-        body.loading { overflow: hidden; height: 100vh; }
-        #splash-screen { transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1); }
-        #main-content { opacity: 0; transition: opacity 1.2s ease-in-out; }
-        #main-content.loaded { opacity: 1; }
-        
-        /* Optimasi Kartu di Mobile */
-        .category-card:hover .icon-box { transform: scale(1.1); background-color: #06b6d4; color: white; }
-        
-        /* Custom UI Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #06b6d4; border-radius: 10px; }
-        
-        select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
+        :root {
+            --hero-grad: linear-gradient(135deg, #7f00ff, #e100ff);
+            --glass: rgba(255, 255, 255, 0.9);
+            --text-dark: #2d3436;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            background: #f8f9fa;
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* Splash Screen */
+        #splash {
+            position: fixed; width: 100%; height: 100vh; background: white;
+            display: flex; justify-content: center; align-items: center; z-index: 10000;
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        /* Navbar */
+        nav {
+            padding: 15px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        }
+
+        .logo-text { font-size: 24px; font-weight: 800; background: var(--hero-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; cursor: pointer; }
+
+        /* Animations */
+        .fade-in { animation: fadeIn 0.5s forwards; }
+        .fade-out { animation: fadeOut 0.5s forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; transform: translateY(-20px); } }
+
+        /* HERO SECTION - BALANCED LAYOUT */
+        #hero-section {
+            min-height: 85vh;
+            background: var(--hero-grad);
+            display: flex;
+            align-items: center; /* Menyeimbangkan posisi vertikal */
+            justify-content: center;
+            color: white;
+            padding: 0 10%;
+            clip-path: ellipse(150% 100% at 50% 0%);
+            gap: 50px;
+        }
+
+        .hero-text { 
+            flex: 1; 
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hero-text h1 { 
+            font-size: clamp(2.5rem, 5vw, 4rem); 
+            margin: 0 0 20px 0; 
+            line-height: 1.1; 
+            font-weight: 800;
+        }
+
+        .hero-text p { 
+            font-size: 1.2rem; 
+            opacity: 0.95; 
+            margin-bottom: 35px;
+            line-height: 1.6;
+        }
+
+        .hero-image { 
+            flex: 1; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+        }
+
+        .hero-image img { 
+            width: 100%; 
+            max-width: 550px; 
+            height: auto;
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.25)); 
+            animation: float 5s ease-in-out infinite;
+        }
+
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-25px); } }
+
+        .cta-btn {
+            align-self: flex-start; /* Tombol tetap di kiri teks */
+            padding: 18px 45px; 
+            background: white;
+            color: #7f00ff; 
+            border-radius: 50px; 
+            text-decoration: none;
+            font-weight: 800; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            cursor: pointer; 
+            transition: 0.3s;
+            font-size: 1.1rem;
+        }
+        .cta-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0,0,0,0.25); }
+
+        /* Content Area */
+        #main-content { display: none; padding: 50px 8%; text-align: center; }
+        .grid-layout { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        @media (min-width: 768px) { .grid-layout { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 25px; } }
+
+        .card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); cursor: pointer; transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(127, 0, 255, 0.2); }
+        .card img.cover-img { width: 100%; height: 220px; object-fit: cover; }
+        .jenjang-logo-wrapper { padding: 30px; background: #fdfdfd; display: flex; justify-content: center; }
+        .jenjang-logo-wrapper img { width: 60px; }
+        .card-info { padding: 15px; font-size: 0.85rem; font-weight: 600; }
+
+        .nav-controls { margin-bottom: 30px; display: flex; justify-content: flex-start; gap: 10px; }
+        .btn-nav { padding: 10px 25px; border-radius: 30px; border: none; background: #eee; cursor: pointer; font-family: inherit; font-weight: 600; }
+
+        /* Modal Flipbook */
+        .modal {
+            display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.98); justify-content: center; align-items: center;
+        }
+        .close-btn { position: absolute; top: 15px; right: 20px; color: white; font-size: 35px; cursor: pointer; z-index: 2100; }
+        #book-container { width: 95vw; height: 90vh; display: flex; justify-content: center; align-items: center; }
+        #flipbook { visibility: hidden; }
+        #flipbook.st-ready { visibility: visible; }
+        .page { background-color: #000; display: flex; justify-content: center; align-items: center; }
+        .page img { width: 100%; height: 100%; object-fit: contain; }
+
+        @media (max-width: 900px) {
+            #hero-section { flex-direction: column; text-align: center; clip-path: none; padding-top: 60px; gap: 30px; }
+            .hero-text { align-items: center; }
+            .cta-btn { align-self: center; }
+            .hero-text h1 { font-size: 2.5rem; }
+        }
     </style>
 </head>
-<body class="bg-gray-50 font-sans text-gray-900 loading">
+<body>
 
-    <div id="splash-screen" class="fixed inset-0 z-[200] bg-gradient-to-br from-slate-950 via-cyan-950 to-black flex flex-col items-center justify-center pointer-events-none">
-        <div class="relative w-72 md:w-[500px] drop-shadow-[0_0_50px_rgba(6,182,212,0.3)]">
-            <img src="Bumper-Yudigital.gif" alt="yuDigital Bumper" class="w-full h-auto">
+    <div id="splash"><img src="Bumper-Yudigital.gif" width="200"></div>
+
+    <nav>
+        <div class="logo-text" onclick="location.reload()">yuDigital</div>
+        <div style="font-size: 12px; color: #636e72;">Indonesia</div>
+    </nav>
+
+    <header id="hero-section">
+        <div class="hero-text">
+            <h1>Digitalize Your Learning</h1>
+            <p>Platform katalog interaktif masa kini untuk akses materi pendidikan yang lebih seru dan mudah dipahami.</p>
+            <div class="cta-btn" onclick="startApp()">Mulai Sekarang</div>
         </div>
-        <div class="w-48 h-1 bg-white/10 mt-10 rounded-full overflow-hidden">
-            <div id="loading-bar" class="h-full bg-cyan-500 w-0 transition-all duration-[7000ms] ease-linear"></div>
+        <div class="hero-image">
+            <img src="komp&Tablet.png" alt="E-Learning yuDigital">
         </div>
-    </div>
+    </header>
 
-    <div id="main-content">
-        <nav class="bg-white/80 backdrop-blur-md py-4 px-6 md:px-8 flex items-center justify-between shadow-sm sticky top-0 z-50">
-            <div class="flex items-center">
-                <img src="Logo yuDigital.png" alt="Logo" class="h-7 md:h-8 w-auto object-contain">
-                <span class="ml-4 pl-4 border-l border-gray-200 text-[10px] font-black tracking-[0.2em] uppercase text-gray-400 hidden sm:block">Literasi Digital</span>
-            </div>
-            <a href="https://wa.me/628123456789" class="bg-cyan-500 text-white px-5 py-2 rounded-full text-[10px] font-bold hover:bg-cyan-600 transition shadow-lg shadow-cyan-100">HUBUNGI KAMI</a>
-        </nav>
-
-        <header class="bg-white px-6 md:px-20 py-12 md:py-24 text-center">
-            <h1 class="text-3xl md:text-7xl font-black text-gray-900 leading-tight mb-4">Katalog Digital <br> <span class="text-cyan-500">yuDigital</span></h1>
-            <p class="text-gray-500 text-sm md:text-lg max-w-2xl mx-auto">Pilih tingkatan sekolah untuk menjelajahi seri buku interaktif kami.</p>
-        </header>
-
-        <section class="px-6 md:px-20 pb-20">
-            <div id="category-grid" class="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-8">
-                </div>
-        </section>
-
-        <footer class="py-12 bg-white border-t border-gray-100 text-center">
-            <p class="text-[9px] text-gray-400 font-bold uppercase tracking-[0.3em]">&copy; 2025 yuDigital Indonesia</p>
-        </footer>
-    </div>
-
-    <div id="product-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center px-4">
-        <div class="absolute inset-0 bg-slate-900/95 backdrop-blur-md" onclick="closeModal()"></div>
-        <div id="modal-content" class="bg-white w-full max-w-xl rounded-[2.5rem] md:rounded-[3.5rem] overflow-hidden shadow-2xl relative z-10 transform transition-all scale-90 opacity-0 duration-500">
-            <button onclick="closeModal()" class="absolute top-6 right-6 z-20 text-gray-300 hover:text-red-500 text-2xl md:text-3xl transition"><i class="fas fa-times-circle"></i></button>
-            
-            <div class="p-6 md:p-10 flex flex-col items-center">
-                <p id="modal-tag" class="text-cyan-500 font-black text-[9px] uppercase tracking-widest mb-3"></p>
-                
-                <div class="w-full mb-6 relative">
-                    <div class="relative">
-                        <select id="series-selector" onchange="changeBookSeries(this.value)" class="w-full p-4 bg-gray-100 border-none rounded-xl md:rounded-[1.5rem] font-black text-gray-800 focus:ring-2 focus:ring-cyan-500 outline-none cursor-pointer text-center text-sm md:text-lg">
-                        </select>
-                        <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-cyan-500 text-xs">
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="relative w-full bg-gray-50 rounded-[2rem] md:rounded-[2.5rem] p-4 md:p-8 flex items-center justify-center min-h-[300px] md:min-h-[420px] shadow-inner">
-                    <button onclick="prevSlide()" class="absolute left-2 md:left-4 bg-white/90 w-10 h-10 md:w-12 md:h-12 rounded-full shadow-lg hover:bg-cyan-500 hover:text-white transition z-10 flex items-center justify-center"><i class="fas fa-chevron-left"></i></button>
-                    
-                    <div class="w-full overflow-hidden flex justify-center">
-                        <img id="slider-img" src="" class="max-h-60 md:max-h-80 object-contain drop-shadow-xl transition-all duration-300">
-                    </div>
-
-                    <button onclick="nextSlide()" class="absolute right-2 md:right-4 bg-white/90 w-10 h-10 md:w-12 md:h-12 rounded-full shadow-lg hover:bg-cyan-500 hover:text-white transition z-10 flex items-center justify-center"><i class="fas fa-chevron-right"></i></button>
-                </div>
-
-                <div id="slider-dots" class="flex gap-2 mt-6"></div>
-
-                <button onclick="pesanKatalog()" class="mt-8 w-full bg-green-500 hover:bg-green-600 text-white font-black py-4 md:py-5 rounded-xl md:rounded-[1.5rem] transition shadow-xl flex items-center justify-center gap-3 text-xs md:text-sm uppercase tracking-widest">
-                    <i class="fab fa-whatsapp text-xl"></i> Hubungi Admin
-                </button>
-            </div>
+    <main id="main-content">
+        <div class="nav-controls">
+            <button id="btnBackHome" class="btn-nav" onclick="goBackToHome()">← Home</button>
+            <button id="btnBackJenjang" class="btn-nav" onclick="showMainJenjang()" style="display:none;">← Pilih Jenjang</button>
         </div>
+        <h2 id="sectionTitle" style="margin-bottom: 30px; font-size: 1.5rem;">Pilih Jenjang</h2>
+        <div class="grid-layout" id="content-area"></div>
+    </main>
+
+    <div id="bookModal" class="modal">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <div id="book-container"><div id="flipbook"></div></div>
     </div>
 
     <script>
-        const masterData = {
-            sd: [
-                { judul: 'Basic English', total: 6 },
-                { judul: 'Pancasila', total: 6 },
-                { judul: 'Matematika SD', total: 6 },
-                { judul: 'Bahasa Indonesia SD', total: 6 }
-            ],
-            smp: [
-                { judul: 'bahasa indonesia', total: 3 },
-                { judul: 'IPA 1 SMP', total: 3 },
-                { judul: 'matematika', total: 3 },
-                { judul: 'pancasila', total: 3 }
-            ],
-            sma: [
-                { judul: 'geografi', total: 3 },
-                { judul: 'kimia', total: 3 },
-                { judul: 'matematika', total: 3 }
-            ],
-            smk: [
-                { judul: 'smk', total: 3 }
-            ],
-            madrasah: [
-                { judul: 'mi', total: 3 },
-                { judul: 'mts', total: 3 },
-                { judul: 'ma', total: 3 }
-            ]
-        };
+ const dataBuku = [
+    // JENJANG SD
+    { 
+        jenjang: "SD", 
+        judul: "Bahasa Indonesia SD", 
+        cover: "sd/bahasa indonesia SD-1.webp", 
+        folder: "sd", 
+        pages: ["bahasa indonesia SD-1.webp", "bahasa indonesia SD-2.webp", "bahasa indonesia SD-3.webp", "bahasa indonesia SD-4.webp", "bahasa indonesia SD-5.webp", "bahasa indonesia SD-6.webp", "bahasa indonesia SD-7.webp", "bahasa indonesia SD-1.webp"] 
+    },
+    { 
+        jenjang: "SD", 
+        judul: "Matematika SD", 
+        cover: "sd/matematika SD-1.webp", 
+        folder: "sd", 
+        pages: ["matematika SD-1.webp", "matematika SD-2.webp", "matematika SD-3.webp", "matematika SD-4.webp", "matematika SD-5.webp", "matematika SD-6.webp", "matematika SD-7.webp", "matematika SD-1.webp"] 
+    },
 
-        const categories = [
-            { id: 'sd', label: 'SD', bg: 'bg-orange-50', border: 'border-orange-100', icon: 'fa-child', color: 'text-orange-500' },
-            { id: 'smp', label: 'SMP', bg: 'bg-blue-50', border: 'border-blue-100', icon: 'fa-user-graduate', color: 'text-blue-500' },
-            { id: 'sma', label: 'SMA', bg: 'bg-rose-50', border: 'border-rose-100', icon: 'fa-microscope', color: 'text-rose-500' },
-            { id: 'smk', label: 'SMK', bg: 'bg-purple-50', border: 'border-purple-100', icon: 'fa-tools', color: 'text-purple-500' },
-            { id: 'madrasah', label: 'Madrasah', bg: 'bg-green-50', border: 'border-green-100', icon: 'fa-mosque', color: 'text-green-500' }
-        ];
+    // JENJANG SMP
+    { 
+        jenjang: "SMP", 
+        judul: "IPA SMP", 
+        cover: "smp/IPA 1 SMP.webp", 
+        folder: "smp", 
+        pages: ["IPA 1 SMP.webp", "IPA 2 SMP.webp", "IPA 3 SMP.webp", "IPA 4 SMP.webp", "IPA 5 SMP.webp", "IPA 6 SMP.webp", "IPA 7 SMP.webp", "IPA 1 SMP.webp"] 
+    },
+    { 
+        jenjang: "SMP", 
+        judul: "IPS SMP", 
+        cover: "smp/IPS 1 SMP.webp", 
+        folder: "smp", 
+        pages: ["IPS 1 SMP.webp", "IPS 2 SMP.webp", "IPS 3 SMP.webp", "IPS 4 SMP.webp", "IPS 5 SMP.webp", "IPS 6 SMP.webp", "IPS 7 SMP.webp", "IPS 1 SMP.webp"] 
+    },
 
-        let cIdx = 1, cTotal = 0, cPath = "", cTitle = "", currentCatId = "";
+    // JENJANG SMA
+    { 
+        jenjang: "SMA", 
+        judul: "Kimia SMA", 
+        cover: "sma/kimia-1.webp", 
+        folder: "sma", 
+        pages: ["kimia-1.webp", "kimia-2.webp", "kimia-3.webp", "kimia-4.webp", "kimia-5.webp", "kimia-6.webp", "kimia-7.webp", "kimia-1.webp"] 
+    },
+    { 
+        jenjang: "SMA", 
+        judul: "Biologi SMA", 
+        cover: "sma/biologi-1.webp", 
+        folder: "sma", 
+        pages: ["biologi-1.webp", "biologi-2.webp", "biologi-3.webp", "biologi-4.webp", "biologi-5.webp", "biologi-6.webp", "biologi-7.webp", "biologi-1.webp"] 
+    },
 
-        const grid = document.getElementById('category-grid');
-        categories.forEach(cat => {
-            grid.innerHTML += `
-                <div class="category-card group cursor-pointer" onclick="openCategoryModal('${cat.id}')">
-                    <div class="${cat.bg} ${cat.border} border rounded-[2rem] md:rounded-[3.5rem] p-6 md:p-12 flex flex-col items-center justify-center transition-all duration-500 hover:shadow-xl md:h-96 h-48">
-                        <div class="icon-box w-12 h-12 md:w-20 md:h-20 mb-3 md:mb-8 bg-white rounded-xl md:rounded-[1.5rem] flex items-center justify-center shadow-sm transition-all duration-500 ${cat.color} text-xl md:text-3xl">
-                             <i class="fas ${cat.icon}"></i>
-                        </div>
-                        <h4 class="font-black text-gray-800 text-xs md:text-xl uppercase tracking-tighter">${cat.label}</h4>
-                        <p class="text-gray-400 text-[8px] md:text-[10px] font-bold mt-2 uppercase tracking-widest hidden md:block">Lihat Seri</p>
-                    </div>
-                </div>
-            `;
-        });
+    // JENJANG SMK
+    { 
+        jenjang: "SMK", 
+        judul: "Teknik Mesin SMK", 
+        cover: "smk/smk-1.webp", 
+        folder: "smk", 
+        pages: ["smk-1.webp", "smk-2.webp", "smk-3.webp", "smk-4.webp", "smk-5.webp", "smk-6.webp", "smk-7.webp", "smk-1.webp"] 
+    },
 
-        function openCategoryModal(id) {
-            currentCatId = id;
-            const selector = document.getElementById('series-selector');
-            selector.innerHTML = "";
-            masterData[id].forEach(b => {
-                const opt = document.createElement('option');
-                opt.value = b.judul; opt.innerText = b.judul;
-                selector.appendChild(opt);
-            });
-            document.getElementById('modal-tag').innerText = id.toUpperCase() + " SERIES";
-            changeBookSeries(masterData[id][0].judul);
-            document.getElementById('product-modal').classList.remove('hidden');
-            setTimeout(() => { 
-                document.getElementById('modal-content').classList.replace('scale-90', 'scale-100'); 
-                document.getElementById('modal-content').classList.replace('opacity-0', 'opacity-100'); 
-            }, 50);
-        }
+    // JENJANG MADRASAH
+    { 
+        jenjang: "Madrasah", 
+        judul: "MA - Madrasah Aliyah", 
+        cover: "madrasah/ma-1.webp", 
+        folder: "madrasah", 
+        pages: ["ma-1.webp", "ma-2.webp", "ma-3.webp", "ma-4.webp", "ma-5.webp", "ma-6.webp", "ma-7.webp", "ma-1.webp"] 
+    },
+    { 
+        jenjang: "Madrasah", 
+        judul: "MI - Madrasah Ibtidaiyah", 
+        cover: "madrasah/mi-1.webp", 
+        folder: "madrasah", 
+        pages: ["mi-1.webp", "mi-2.webp", "mi-3.webp", "mi-4.webp", "mi-5.webp", "mi-6.webp", "mi-7.webp", "mi-1.webp"] 
+    },
+    { 
+        jenjang: "Madrasah", 
+        judul: "MTs - Madrasah Tsanawiyah", 
+        cover: "madrasah/mts-1.webp", 
+        folder: "madrasah", 
+        pages: ["mts-1.webp", "mts-2.webp", "mts-3.webp", "mts-4.webp", "mts-5.webp", "mts-6.webp", "mts-7.webp", "mts-1.webp"] 
+    }
+];
 
-        function changeBookSeries(judul) {
-            cIdx = 1; cTitle = judul; cPath = currentCatId;
-            cTotal = masterData[currentCatId].find(b => b.judul === judul).total;
-            updateSlider();
-            createDots();
-        }
+        const hero = document.getElementById('hero-section');
+        const mainContent = document.getElementById('main-content');
+        const contentArea = document.getElementById('content-area');
+        const sectionTitle = document.getElementById('sectionTitle');
+        const btnBackHome = document.getElementById('btnBackHome');
+        const btnBackJenjang = document.getElementById('btnBackJenjang');
 
-        function updateSlider() {
-            const img = document.getElementById('slider-img');
-            img.style.opacity = "0";
+        function startApp() {
+            hero.classList.add('fade-out');
             setTimeout(() => {
-                img.src = `${cPath}/${cTitle}-${cIdx}.webp`;
-                img.style.opacity = "1";
-                updateDots();
-            }, 200);
+                hero.style.display = 'none';
+                mainContent.style.display = 'block';
+                showMainJenjang();
+            }, 500);
         }
 
-        function nextSlide() { cIdx = (cIdx >= cTotal) ? 1 : cIdx + 1; updateSlider(); }
-        function prevSlide() { cIdx = (cIdx <= 1) ? cTotal : cIdx - 1; updateSlider(); }
-
-        function createDots() {
-            const cont = document.getElementById('slider-dots');
-            cont.innerHTML = "";
-            for(let i=1; i<=cTotal; i++) {
-                const dot = document.createElement('div');
-                dot.className = `h-1 rounded-full transition-all duration-300 ${i === 1 ? 'w-6 bg-cyan-500' : 'w-1.5 bg-gray-200'}`;
-                cont.appendChild(dot);
-            }
+        function showMainJenjang() {
+            btnBackHome.style.display = "block";
+            btnBackJenjang.style.display = "none";
+            sectionTitle.innerText = "Pilih Jenjang";
+            contentArea.innerHTML = "";
+            const jenjangs = ["SD", "SMP", "SMA", "SMK", "Madrasah"];
+            jenjangs.forEach(j => {
+                const card = document.createElement('div');
+                card.className = 'card fade-in';
+                card.innerHTML = `<div class="jenjang-logo-wrapper"><img src="Logo yuDigital.png"></div><div class="card-info"><h3>Katalog ${j}</h3></div>`;
+                card.onclick = () => showBooks(j);
+                contentArea.appendChild(card);
+            });
         }
 
-        function updateDots() {
-            const dots = document.getElementById('slider-dots').children;
-            for(let i=0; i<dots.length; i++) {
-                dots[i].className = (i === cIdx - 1) ? "h-1 w-6 bg-cyan-500 rounded-full transition-all" : "h-1 w-1.5 bg-gray-200 rounded-full transition-all";
-            }
+        function showBooks(jenjang) {
+            btnBackHome.style.display = "none";
+            btnBackJenjang.style.display = "block";
+            sectionTitle.innerText = "Katalog " + jenjang;
+            contentArea.innerHTML = "";
+            const filtered = dataBuku.filter(b => b.jenjang === jenjang);
+            filtered.forEach(b => {
+                const card = document.createElement('div');
+                card.className = 'card fade-in';
+                card.innerHTML = `<img src="${b.cover}" class="cover-img"><div class="card-info"><h3>${b.judul}</h3></div>`;
+                card.onclick = () => openFlipbook(b);
+                contentArea.appendChild(card);
+            });
+            window.scrollTo(0,0);
+        }
+
+        function goBackToHome() {
+            mainContent.classList.add('fade-out');
+            setTimeout(() => {
+                mainContent.style.display = 'none';
+                mainContent.classList.remove('fade-out');
+                hero.style.display = 'flex';
+                hero.classList.remove('fade-out');
+                hero.classList.add('fade-in');
+            }, 500);
+        }
+
+        let flipInstance = null;
+        function openFlipbook(buku) {
+            const modal = document.getElementById('bookModal');
+            const container = document.getElementById('book-container');
+            container.innerHTML = '<div id="flipbook"></div>';
+            const fbElem = document.getElementById('flipbook');
+            buku.pages.forEach(p => {
+                const pElem = document.createElement('div');
+                pElem.className = 'page';
+                pElem.innerHTML = `<img src="${buku.folder}/${p}" loading="eager">`;
+                fbElem.appendChild(pElem);
+            });
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                const winH = window.innerHeight;
+                const winW = window.innerWidth;
+                flipInstance = new St.PageFlip(fbElem, {
+                    width: winW > 800 ? 550 : winW * 0.9,
+                    height: winH * 0.85,
+                    size: "fixed",
+                    showCover: false,
+                    usePortrait: true,
+                    flippingTime: 600,
+                    mobileScrollSupport: true
+                });
+                flipInstance.loadFromHTML(document.querySelectorAll('.page'));
+                fbElem.classList.add('st-ready');
+            }, 300);
         }
 
         function closeModal() {
-            document.getElementById('modal-content').classList.replace('scale-100', 'scale-90');
-            document.getElementById('modal-content').classList.replace('opacity-100', 'opacity-0');
-            setTimeout(() => { document.getElementById('product-modal').classList.add('hidden'); }, 500);
+            document.getElementById('bookModal').style.display = 'none';
+            if (flipInstance) { flipInstance.destroy(); flipInstance = null; }
         }
 
-        const DURATION_GIF = 7000;
-        window.addEventListener('load', () => { document.getElementById('loading-bar').style.width = '100%'; });
         setTimeout(() => {
-            const splash = document.getElementById('splash-screen');
-            const main = document.getElementById('main-content');
-            splash.classList.add('opacity-0');
-            main.classList.add('loaded');
-            setTimeout(() => { splash.style.display = 'none'; document.body.classList.remove('loading'); }, 1000);
-        }, DURATION_GIF);
-
-        function pesanKatalog() {
-            const wa = "628123456789"; 
-            window.open(`https://wa.me/${wa}?text=Halo yuDigital, saya ingin bertanya seri: ${cTitle}`, '_blank');
-        }
+            const splash = document.getElementById('splash');
+            splash.style.opacity = '0';
+            setTimeout(() => { splash.style.display = 'none'; }, 800);
+        }, 3000);
     </script>
 </body>
 </html>
