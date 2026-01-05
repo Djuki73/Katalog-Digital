@@ -285,20 +285,33 @@
             }, 500);
         }
 
-        function showMainJenjang() {
-            btnBackHome.style.display = "block";
-            btnBackJenjang.style.display = "none";
-            sectionTitle.innerText = "Pilih Jenjang";
-            contentArea.innerHTML = "";
-            const jenjangs = ["SD", "SMP", "SMA", "SMK", "Madrasah"];
-            jenjangs.forEach(j => {
-                const card = document.createElement('div');
-                card.className = 'card fade-in';
-                card.innerHTML = `<div class="jenjang-logo-wrapper"><img src="Logo yuDigital.png"></div><div class="card-info"><h3>Katalog ${j}</h3></div>`;
-                card.onclick = () => showBooks(j);
-                contentArea.appendChild(card);
-            });
-        }
+function showMainJenjang() {
+    btnBackHome.style.display = "block";
+    btnBackJenjang.style.display = "none";
+    sectionTitle.innerText = "Pilih Jenjang";
+    contentArea.innerHTML = "";
+
+    // Data cover masing-masing jenjang
+    const jenjangData = [
+        { name: "SD", image: "sd/coverSD.webp" },
+        { name: "SMP", image: "smp/coverSMP.webp" },
+        { name: "SMA", image: "sma/coverSMA.webp" },
+        { name: "SMK", image: "smk/coverSMK.webp" },
+        { name: "Madrasah", image: "madrasah/coverMadrasah.webp" }
+    ];
+
+    jenjangData.forEach(j => {
+        const card = document.createElement('div');
+        card.className = 'card fade-in';
+        card.innerHTML = `
+            <img src="${j.image}" class="cover-img" style="height: 180px; object-fit: cover;">
+            <div class="card-info">
+                <h3>Katalog ${j.name}</h3>
+            </div>`;
+        card.onclick = () => showBooks(j.name);
+        contentArea.appendChild(card);
+    });
+}
 
         function showBooks(jenjang) {
             btnBackHome.style.display = "none";
