@@ -44,18 +44,12 @@
 
         .logo-text { font-size: 24px; font-weight: 800; background: var(--hero-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; cursor: pointer; }
 
-        /* Animations */
-        .fade-in { animation: fadeIn 0.5s forwards; }
-        .fade-out { animation: fadeOut 0.5s forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; transform: translateY(-20px); } }
-
-        /* HERO SECTION - BALANCED LAYOUT */
+        /* Hero Section */
         #hero-section {
             min-height: 85vh;
             background: var(--hero-grad);
             display: flex;
-            align-items: center; /* Menyeimbangkan posisi vertikal */
+            align-items: center;
             justify-content: center;
             color: white;
             padding: 0 10%;
@@ -63,98 +57,58 @@
             gap: 50px;
         }
 
-        .hero-text { 
-            flex: 1; 
-            max-width: 600px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .hero-text h1 { 
-            font-size: clamp(2.5rem, 5vw, 4rem); 
-            margin: 0 0 20px 0; 
-            line-height: 1.1; 
-            font-weight: 800;
-        }
-
-        .hero-text p { 
-            font-size: 1.2rem; 
-            opacity: 0.95; 
-            margin-bottom: 35px;
-            line-height: 1.6;
-        }
-
-        .hero-image { 
-            flex: 1; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center;
-        }
-
-        .hero-image img { 
-            width: 100%; 
-            max-width: 550px; 
-            height: auto;
-            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.25)); 
-            animation: float 5s ease-in-out infinite;
-        }
-
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-25px); } }
+        .hero-text { flex: 1; max-width: 600px; display: flex; flex-direction: column; }
+        .hero-text h1 { font-size: clamp(2.2rem, 5vw, 4rem); margin-bottom: 20px; line-height: 1.1; font-weight: 800; }
+        .hero-text p { font-size: 1.1rem; opacity: 0.95; margin-bottom: 35px; }
+        
+        .hero-image { flex: 1; display: flex; justify-content: center; }
+        .hero-image img { width: 100%; max-width: 500px; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.25)); animation: float 5s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
 
         .cta-btn {
-            align-self: flex-start; /* Tombol tetap di kiri teks */
-            padding: 18px 45px; 
-            background: white;
-            color: #7f00ff; 
-            border-radius: 50px; 
-            text-decoration: none;
-            font-weight: 800; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            cursor: pointer; 
-            transition: 0.3s;
-            font-size: 1.1rem;
+            align-self: flex-start; padding: 16px 40px; background: white;
+            color: #7f00ff; border-radius: 50px; text-decoration: none;
+            font-weight: 800; box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            cursor: pointer; transition: 0.3s;
         }
-        .cta-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0,0,0,0.25); }
 
-        /* Content Area */
-        #main-content { display: none; padding: 50px 8%; text-align: center; }
+        /* Main Content */
+        #main-content { display: none; padding: 40px 8%; text-align: center; }
         .grid-layout { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
         @media (min-width: 768px) { .grid-layout { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 25px; } }
 
         .card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); cursor: pointer; transition: 0.3s; }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(127, 0, 255, 0.2); }
-        .card img.cover-img { width: 100%; height: 220px; object-fit: cover; }
-        .jenjang-logo-wrapper { padding: 30px; background: #fdfdfd; display: flex; justify-content: center; }
-        .jenjang-logo-wrapper img { width: 60px; }
+        .card:hover { transform: translateY(-5px); }
+        .card img.cover-img { width: 100%; height: 200px; object-fit: cover; }
         .card-info { padding: 15px; font-size: 0.85rem; font-weight: 600; }
 
-        .nav-controls { margin-bottom: 30px; display: flex; justify-content: flex-start; gap: 10px; }
-        .btn-nav { padding: 10px 25px; border-radius: 30px; border: none; background: #eee; cursor: pointer; font-family: inherit; font-weight: 600; }
+        .nav-controls { margin-bottom: 30px; display: flex; gap: 10px; }
+        .btn-nav { padding: 10px 20px; border-radius: 30px; border: none; background: #eee; cursor: pointer; font-weight: 600; font-family: inherit; }
 
-        /* Modal Flipbook */
+        /* Modal & Flipbook Proporsional */
         .modal {
             display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.98); justify-content: center; align-items: center;
+            background: rgba(0,0,0,0.95); justify-content: center; align-items: center;
         }
         .close-btn { position: absolute; top: 15px; right: 20px; color: white; font-size: 35px; cursor: pointer; z-index: 2100; }
-        #book-container { width: 95vw; height: 90vh; display: flex; justify-content: center; align-items: center; }
-        #flipbook { visibility: hidden; }
-        #flipbook.st-ready { visibility: visible; }
+        #book-container { width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center; }
+        
         .page { background-color: #000; display: flex; justify-content: center; align-items: center; }
-        .page img { width: 100%; height: 100%; object-fit: contain; }
+        .page img { width: 100%; height: 100%; object-fit: contain; } /* Kunci Proporsional */
+
+        .fade-in { animation: fadeIn 0.5s forwards; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         @media (max-width: 900px) {
-            #hero-section { flex-direction: column; text-align: center; clip-path: none; padding-top: 60px; gap: 30px; }
+            #hero-section { flex-direction: column; text-align: center; padding: 80px 5% 40px; }
             .hero-text { align-items: center; }
             .cta-btn { align-self: center; }
-            .hero-text h1 { font-size: 2.5rem; }
         }
     </style>
 </head>
 <body>
 
-    <div id="splash"><img src="Bumper-Yudigital.gif" width="200"></div>
+    <div id="splash"><img src="Bumper-Yudigital.gif" width="180"></div>
 
     <nav>
         <div class="logo-text" onclick="location.reload()">yuDigital</div>
@@ -164,20 +118,20 @@
     <header id="hero-section">
         <div class="hero-text">
             <h1>Digitalize Your Learning</h1>
-            <p>Platform katalog interaktif masa kini untuk akses materi pendidikan yang lebih seru dan mudah dipahami.</p>
+            <p>Akses katalog pendidikan interaktif dengan pengalaman membaca yang lebih modern.</p>
             <div class="cta-btn" onclick="startApp()">Mulai Sekarang</div>
         </div>
         <div class="hero-image">
-            <img src="komp&Tablet.png" alt="E-Learning yuDigital">
+            <img src="komp&Tablet.png" alt="yuDigital">
         </div>
     </header>
 
     <main id="main-content">
         <div class="nav-controls">
-            <button id="btnBackHome" class="btn-nav" onclick="goBackToHome()">← Home</button>
+            <button id="btnBackHome" class="btn-nav" onclick="location.reload()">← Home</button>
             <button id="btnBackJenjang" class="btn-nav" onclick="showMainJenjang()" style="display:none;">← Pilih Jenjang</button>
         </div>
-        <h2 id="sectionTitle" style="margin-bottom: 30px; font-size: 1.5rem;">Pilih Jenjang</h2>
+        <h2 id="sectionTitle">Pilih Jenjang</h2>
         <div class="grid-layout" id="content-area"></div>
     </main>
 
@@ -187,139 +141,65 @@
     </div>
 
     <script>
- const dataBuku = [
-    // JENJANG SD
-    { 
-        jenjang: "SD", 
-        judul: "Bahasa Indonesia SD", 
-        cover: "sd/bahasa indonesia SD-1.webp", 
-        folder: "sd", 
-        pages: ["bahasa indonesia SD-1.webp", "bahasa indonesia SD-2.webp", "bahasa indonesia SD-3.webp", "bahasa indonesia SD-4.webp", "bahasa indonesia SD-5.webp", "bahasa indonesia SD-6.webp", "bahasa indonesia SD-7.webp", "bahasa indonesia SD-1.webp"] 
-    },
-    { 
-        jenjang: "SD", 
-        judul: "Matematika SD", 
-        cover: "sd/matematika SD-1.webp", 
-        folder: "sd", 
-        pages: ["matematika SD-1.webp", "matematika SD-2.webp", "matematika SD-3.webp", "matematika SD-4.webp", "matematika SD-5.webp", "matematika SD-6.webp", "matematika SD-7.webp", "matematika SD-1.webp"] 
-    },
+        // Generator Nama File Otomatis
+        const gen = (n, prefix) => Array.from({ length: n }, (_, i) => `${prefix}${i + 1}.webp`);
 
-    // JENJANG SMP
-    { 
-        jenjang: "SMP", 
-        judul: "IPA SMP", 
-        cover: "smp/IPA 1 SMP.webp", 
-        folder: "smp", 
-        pages: ["IPA 1 SMP.webp", "IPA 2 SMP.webp", "IPA 3 SMP.webp", "IPA 4 SMP.webp", "IPA 5 SMP.webp", "IPA 6 SMP.webp", "IPA 7 SMP.webp", "IPA 1 SMP.webp"] 
-    },
-    { 
-        jenjang: "SMP", 
-        judul: "IPS SMP", 
-        cover: "smp/IPS 1 SMP.webp", 
-        folder: "smp", 
-        pages: ["IPS 1 SMP.webp", "IPS 2 SMP.webp", "IPS 3 SMP.webp", "IPS 4 SMP.webp", "IPS 5 SMP.webp", "IPS 6 SMP.webp", "IPS 7 SMP.webp", "IPS 1 SMP.webp"] 
-    },
+        const dataBuku = [
+            // SD
+            { jenjang: "SD", judul: "IPAS 3 SD", folder: "sd/IPAS", cover: "sd/IPAS/coverIPAS3.webp", pages: gen(10, "IPAS 3 SD_Page_") },
+            { jenjang: "SD", judul: "Bahasa Indonesia", folder: "sd/Bhs", cover: "sd/Bhs/coverBHS.webp", pages: gen(10, "BHs 1 SD Kls I_Page_") },
+            { jenjang: "SD", judul: "Matematika 2SD", folder: "sd/matematika 2SD", cover: "sd/matematika 2SD/coverIMtk2.webp", pages: gen(10, "MTK 2 SD_Page_") },
+            { jenjang: "SD", judul: "Pancasila SD", folder: "sd/Pancasila", cover: "sd/Pancasila/coverPancasila.webp", pages: gen(10, "Pendidikan Pancasila 4 SD_Page_") },
+            
+            // SMP
+            { jenjang: "SMP", judul: "IPA SMP", folder: "smp", cover: "smp/IPA 1 SMP.webp", pages: gen(7, "IPA ") },
+            
+            // SMA
+            { jenjang: "SMA", judul: "Kimia SMA", folder: "sma", cover: "sma/Kimia 1 SMA_Page_1.webp", pages: gen(8, "Kimia 1 SMA_Page_") },
+            
+            // MADRASAH
+            { jenjang: "Madrasah", judul: "MI Madrasah", folder: "madrasah", cover: "madrasah/mi-1.webp", pages: gen(7, "mi-") },
+            { jenjang: "Madrasah", judul: "MTs Madrasah", folder: "madrasah", cover: "madrasah/mts-1.webp", pages: gen(7, "mts-") }
+        ];
 
-    // JENJANG SMA
-    { 
-        jenjang: "SMA", 
-        judul: "Kimia SMA", 
-        cover: "sma/kimia-1.webp", 
-        folder: "sma", 
-        pages: ["kimia-1.webp", "kimia-2.webp", "kimia-3.webp", "kimia-4.webp", "kimia-5.webp", "kimia-6.webp", "kimia-7.webp", "kimia-1.webp"] 
-    },
-    { 
-        jenjang: "SMA", 
-        judul: "Biologi SMA", 
-        cover: "sma/biologi-1.webp", 
-        folder: "sma", 
-        pages: ["biologi-1.webp", "biologi-2.webp", "biologi-3.webp", "biologi-4.webp", "biologi-5.webp", "biologi-6.webp", "biologi-7.webp", "biologi-1.webp"] 
-    },
-
-    // JENJANG SMK
-    { 
-        jenjang: "SMK", 
-        judul: "Teknik Mesin SMK", 
-        cover: "smk/smk-1.webp", 
-        folder: "smk", 
-        pages: ["smk-1.webp", "smk-2.webp", "smk-3.webp", "smk-4.webp", "smk-5.webp", "smk-6.webp", "smk-7.webp", "smk-1.webp"] 
-    },
-
-    // JENJANG MADRASAH
-    { 
-        jenjang: "Madrasah", 
-        judul: "MA - Madrasah Aliyah", 
-        cover: "madrasah/ma-1.webp", 
-        folder: "madrasah", 
-        pages: ["ma-1.webp", "ma-2.webp", "ma-3.webp", "ma-4.webp", "ma-5.webp", "ma-6.webp", "ma-7.webp", "ma-1.webp"] 
-    },
-    { 
-        jenjang: "Madrasah", 
-        judul: "MI - Madrasah Ibtidaiyah", 
-        cover: "madrasah/mi-1.webp", 
-        folder: "madrasah", 
-        pages: ["mi-1.webp", "mi-2.webp", "mi-3.webp", "mi-4.webp", "mi-5.webp", "mi-6.webp", "mi-7.webp", "mi-1.webp"] 
-    },
-    { 
-        jenjang: "Madrasah", 
-        judul: "MTs - Madrasah Tsanawiyah", 
-        cover: "madrasah/mts-1.webp", 
-        folder: "madrasah", 
-        pages: ["mts-1.webp", "mts-2.webp", "mts-3.webp", "mts-4.webp", "mts-5.webp", "mts-6.webp", "mts-7.webp", "mts-1.webp"] 
-    }
-];
-
-        const hero = document.getElementById('hero-section');
-        const mainContent = document.getElementById('main-content');
-        const contentArea = document.getElementById('content-area');
-        const sectionTitle = document.getElementById('sectionTitle');
-        const btnBackHome = document.getElementById('btnBackHome');
-        const btnBackJenjang = document.getElementById('btnBackJenjang');
+        let flipInstance = null;
 
         function startApp() {
-            hero.classList.add('fade-out');
-            setTimeout(() => {
-                hero.style.display = 'none';
-                mainContent.style.display = 'block';
-                showMainJenjang();
-            }, 500);
+            document.getElementById('hero-section').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+            showMainJenjang();
         }
 
-function showMainJenjang() {
-    btnBackHome.style.display = "block";
-    btnBackJenjang.style.display = "none";
-    sectionTitle.innerText = "Pilih Jenjang";
-    contentArea.innerHTML = "";
+        function showMainJenjang() {
+            document.getElementById('btnBackJenjang').style.display = "none";
+            document.getElementById('btnBackHome').style.display = "block";
+            document.getElementById('sectionTitle').innerText = "Pilih Jenjang";
+            const contentArea = document.getElementById('content-area');
+            contentArea.innerHTML = "";
+            
+            const jenjangs = [
+                { name: "SD", img: "sd/coverSD.gif" },
+                { name: "SMP", img: "sd/coverSD.gif" },
+                { name: "SMA", img: "sd/coverSD.gif" },
+                { name: "Madrasah", img: "sd/coverSD.gif" }
+            ];
 
-    // Data cover masing-masing jenjang
-    const jenjangData = [
-        { name: "SD", image: "sd/coverSD.webp" },
-        { name: "SMP", image: "smp/coverSMP.webp" },
-        { name: "SMA", image: "sma/coverSMA.webp" },
-        { name: "SMK", image: "smk/coverSMK.webp" },
-        { name: "Madrasah", image: "madrasah/coverMadrasah.webp" }
-    ];
-
-    jenjangData.forEach(j => {
-        const card = document.createElement('div');
-        card.className = 'card fade-in';
-        card.innerHTML = `
-            <img src="${j.image}" class="cover-img" style="height: 180px; object-fit: cover;">
-            <div class="card-info">
-                <h3>Katalog ${j.name}</h3>
-            </div>`;
-        card.onclick = () => showBooks(j.name);
-        contentArea.appendChild(card);
-    });
-}
+            jenjangs.forEach(j => {
+                const card = document.createElement('div');
+                card.className = 'card fade-in';
+                card.innerHTML = `<img src="${j.img}" class="cover-img"><div class="card-info"><h3>Katalog ${j.name}</h3></div>`;
+                card.onclick = () => showBooks(j.name);
+                contentArea.appendChild(card);
+            });
+        }
 
         function showBooks(jenjang) {
-            btnBackHome.style.display = "none";
-            btnBackJenjang.style.display = "block";
-            sectionTitle.innerText = "Katalog " + jenjang;
+            document.getElementById('btnBackHome').style.display = "none";
+            document.getElementById('btnBackJenjang').style.display = "block";
+            document.getElementById('sectionTitle').innerText = "Katalog " + jenjang;
+            const contentArea = document.getElementById('content-area');
             contentArea.innerHTML = "";
-            const filtered = dataBuku.filter(b => b.jenjang === jenjang);
-            filtered.forEach(b => {
+            dataBuku.filter(b => b.jenjang === jenjang).forEach(b => {
                 const card = document.createElement('div');
                 card.className = 'card fade-in';
                 card.innerHTML = `<img src="${b.cover}" class="cover-img"><div class="card-info"><h3>${b.judul}</h3></div>`;
@@ -329,44 +209,45 @@ function showMainJenjang() {
             window.scrollTo(0,0);
         }
 
-        function goBackToHome() {
-            mainContent.classList.add('fade-out');
-            setTimeout(() => {
-                mainContent.style.display = 'none';
-                mainContent.classList.remove('fade-out');
-                hero.style.display = 'flex';
-                hero.classList.remove('fade-out');
-                hero.classList.add('fade-in');
-            }, 500);
-        }
-
-        let flipInstance = null;
         function openFlipbook(buku) {
             const modal = document.getElementById('bookModal');
             const container = document.getElementById('book-container');
             container.innerHTML = '<div id="flipbook"></div>';
             const fbElem = document.getElementById('flipbook');
+
             buku.pages.forEach(p => {
                 const pElem = document.createElement('div');
                 pElem.className = 'page';
                 pElem.innerHTML = `<img src="${buku.folder}/${p}" loading="eager">`;
                 fbElem.appendChild(pElem);
             });
+
             modal.style.display = 'flex';
+
             setTimeout(() => {
-                const winH = window.innerHeight;
                 const winW = window.innerWidth;
+                const winH = window.innerHeight;
+
+                // Logika Perhitungan Proporsional (Rasio 1 : 1.45)
+                let bWidth = winW > 800 ? 520 : winW * 0.92;
+                let bHeight = bWidth * 1.45;
+
+                // Jika tinggi melebihi layar, sesuaikan berdasarkan tinggi
+                if (bHeight > winH * 0.88) {
+                    bHeight = winH * 0.88;
+                    bWidth = bHeight / 1.45;
+                }
+
                 flipInstance = new St.PageFlip(fbElem, {
-                    width: winW > 800 ? 550 : winW * 0.9,
-                    height: winH * 0.85,
+                    width: bWidth,
+                    height: bHeight,
                     size: "fixed",
                     showCover: false,
                     usePortrait: true,
-                    flippingTime: 600,
                     mobileScrollSupport: true
                 });
                 flipInstance.loadFromHTML(document.querySelectorAll('.page'));
-                fbElem.classList.add('st-ready');
+                fbElem.style.visibility = 'visible';
             }, 300);
         }
 
@@ -378,8 +259,8 @@ function showMainJenjang() {
         setTimeout(() => {
             const splash = document.getElementById('splash');
             splash.style.opacity = '0';
-            setTimeout(() => { splash.style.display = 'none'; }, 800);
-        }, 3000);
+            setTimeout(() => splash.style.display = 'none', 800);
+        }, 2500);
     </script>
 </body>
 </html>
