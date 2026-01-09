@@ -21,17 +21,15 @@
             color: white;
             overflow: hidden;
             height: 100vh;
-            touch-action: none; /* Mencegah browser melakukan scroll default agar swipe kita lancar */
+            touch-action: none;
         }
 
-        /* 1. Splash Screen */
         #splash-screen {
             position: fixed; width: 100%; height: 100vh; background: white;
             display: flex; justify-content: center; align-items: center; z-index: 10000;
             transition: opacity 0.8s ease;
         }
 
-        /* 2. Navbar */
         nav {
             padding: 15px 8%; display: flex; justify-content: space-between; align-items: center;
             background: rgba(0,0,0,0.6); backdrop-filter: blur(15px);
@@ -40,52 +38,37 @@
         }
         .logo-text { font-size: 24px; font-weight: 800; background: var(--hero-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; cursor: pointer; }
 
-        /* 3. Hero Section */
         #section-hero {
             height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
             background: var(--hero-grad); padding: 0 20px;
         }
         .hero-img {
-            max-width: 500px; width: 70%; height: auto; margin: 15px 0;
+            max-width: 450px; width: 70%; height: auto; margin: 15px 0;
             filter: drop-shadow(0 20px 30px rgba(0,0,0,0.3));
         }
         .cta-btn { padding: 15px 45px; background: white; color: #7f00ff; border-radius: 50px; font-weight: 800; cursor: pointer; border: none; font-size: 1rem; box-shadow: 0 10px 20px rgba(0,0,0,0.2); transition: 0.3s; }
 
-        /* 4. Main App Container */
         #main-app-container { display: none; height: 100vh; position: relative; padding-top: 80px; box-sizing: border-box; }
         .app-page { display: none; height: 100%; width: 100%; position: relative; overflow: hidden; }
 
-        /* 5. JENJANG GRID */
         .jenjang-grid {
             display: grid; 
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px; 
-            padding: 10px 5%; 
-            max-width: 1000px; 
-            margin: 0 auto;
-            height: calc(100vh - 160px);
-            align-content: center;
+            gap: 12px; padding: 10px 5%; max-width: 1000px; margin: 0 auto;
+            height: calc(100vh - 180px); align-content: center;
         }
         .jenjang-card {
-            height: 100%; min-height: 120px; max-height: 180px;
+            height: 100%; min-height: 110px; max-height: 150px;
             border-radius: 18px; background-size: cover; background-position: center;
-            position: relative; overflow: hidden; cursor: pointer;
-            transition: all 0.3s ease;
+            position: relative; overflow: hidden; cursor: pointer; transition: all 0.3s ease;
         }
-        .jenjang-card::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.85; z-index: 1; }
-        .jenjang-info { position: absolute; bottom: 15px; left: 15px; z-index: 2; color: #1a1a1a; }
-        .jenjang-info h3 { margin: 0; font-size: 1.2rem; font-weight: 800; }
+        .jenjang-card::after { content: ''; position: absolute; inset: 0; opacity: 0.85; z-index: 1; }
+        .jenjang-info { position: absolute; bottom: 12px; left: 12px; z-index: 2; color: #1a1a1a; }
+        .jenjang-info h3 { margin: 0; font-size: 1.1rem; font-weight: 800; }
 
-        @media (min-width: 768px) {
-            .jenjang-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
-            .jenjang-card { height: 180px; }
-        }
-
-        /* 6. WHEEL PICKER STABIL */
         .wheel-page-container {
             height: calc(100% - 220px); perspective: 2000px; position: relative; overflow: hidden;
             display: flex; justify-content: center; align-items: center;
-            touch-action: none; /* Penting untuk swipe di mobile */
         }
         .wheel-container {
             position: absolute; width: 100%; max-width: 450px; height: 450px;
@@ -96,9 +79,10 @@
             background-size: cover; background-position: center; border-radius: 15px;
             display: flex; align-items: center; padding: 0 25px;
             backface-visibility: hidden; border: 1px solid rgba(255,255,255,0.1); box-sizing: border-box;
+            cursor: pointer;
         }
         .book-list-card::after {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            content: ''; position: absolute; inset: 0;
             background: linear-gradient(90deg, rgba(0,0,0,0.85) 30%, rgba(0,0,0,0.1)); border-radius: 15px;
         }
         .book-content { position: relative; z-index: 2; margin-top: 6px; }
@@ -112,23 +96,25 @@
             background: rgba(255,255,255,0.03); pointer-events: none; z-index: 1;
         }
 
-        /* 7. Katalog Header & Footer */
         .katalog-header { text-align: center; padding: 10px 0; z-index: 10; position: relative; }
-        .page-title { margin: 0; font-size: 1.1rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
         .search-container { margin: 10px auto; width: 85%; max-width: 350px; position: relative; z-index: 20; }
         .search-input {
-            width: 100%; padding: 8px 18px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);
+            width: 100%; padding: 10px 18px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);
             background: rgba(255,255,255,0.1); color: white; outline: none; font-family: 'Poppins', sans-serif;
-            backdrop-filter: blur(5px); box-sizing: border-box;
+            box-sizing: border-box;
         }
-        .katalog-footer { position: absolute; bottom: 25px; width: 100%; text-align: center; z-index: 10; }
+        .katalog-footer { position: absolute; bottom: 30px; width: 100%; text-align: center; z-index: 100; }
         .btn-back { padding: 10px 30px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white; cursor: pointer; }
 
         .modal-viewer {
-            display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%;
+            display: none; position: fixed; inset: 0; z-index: 5000;
             background: rgba(0,0,0,0.98); justify-content: center; align-items: center;
         }
-        .close-btn { position: absolute; top: 15px; right: 20px; color: white; font-size: 35px; cursor: pointer; z-index: 2200; }
+        .close-btn { position: absolute; top: 20px; right: 25px; color: white; font-size: 45px; cursor: pointer; z-index: 6000; line-height: 1; }
+        #book-viewport { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; }
+
+        .page { background-color: white; box-shadow: inset 7px 0 30px -7px rgba(0,0,0,0.2); }
+        .page-cover { box-shadow: none !important; }
     </style>
 </head>
 <body>
@@ -187,10 +173,45 @@
             { jenjang: "SD", judul: "Pendidikan Pancasila 4 SD Kls IV", folder: "sd/Bhs", cover: "cover/cover10.png", pages: genPages(6, "Bhs-"), desc: "Literasi Dasar" },
             { jenjang: "SD", judul: "Pendidikan Pancasila 5 SD Kls V", folder: "sd/IPAS", cover: "cover/cover1.png", pages: genPages(8, "IPAS 3 SD_Page_"), desc: "Kurikulum Merdeka" },
             { jenjang: "SD", judul: "Pendidikan Pancasila 6 SD Kls VI", folder: "sd/Bhs", cover: "cover/cover2.png", pages: genPages(6, "Bhs-"), desc: "Literasi Dasar" },
-            { jenjang: "SMP", judul: "IPA SMP", folder: "smp", cover: "smp/IPA 1 SMP.webp", pages: genPages(7, "IPA "), desc: "Sains Menengah" },
-            { jenjang: "SMA", judul: "Kimia SMA", folder: "sma", cover: "sma/Kimia 1 SMA_Page_1.webp", pages: genPages(8, "Kimia 1 SMA_Page_"), desc: "Reaksi Kimia" },
-            { jenjang: "SMK", judul: "Tehnik Permesinan", folder: "smk", cover: "smk/Kimia 1 SMA_Page_1.webp", pages: genPages(8, "Kimia 1 SMA_Page_"), desc: "Reaksi Kimia" },
-            { jenjang: "Madrasah", judul: "MI Madrasah", folder: "madrasah", cover: "madrasah/mi-1.webp", pages: genPages(7, "mi-"), desc: "Katalog Religi" }
+            { jenjang: "SMP", judul: "IPA SMP", folder: "smp", cover: "cover/cover1.png", pages: genPages(7, "IPA "), desc: "Sains Menengah" },
+            { jenjang: "SMP", judul: "IPA SMP", folder: "smp", cover: "cover/cover2.png", pages: genPages(7, "IPA "), desc: "Sains Menengah" },
+            { jenjang: "SMP", judul: "IPA SMP", folder: "smp", cover: "cover/cover3.png", pages: genPages(7, "IPA "), desc: "Sains Menengah" },
+            { jenjang: "SMP", judul: "IPA SMP", folder: "smp", cover: "cover/cover4.png", pages: genPages(7, "IPA "), desc: "Sains Menengah" },
+            { jenjang: "SMP", judul: "IPA SMP", folder: "smp", cover: "cover/cover5.png", pages: genPages(7, "IPA "), desc: "Sains Menengah" },
+            { jenjang: "SMP", judul: "IPA SMP", folder: "smp", cover: "cover/cover6.png", pages: genPages(7, "IPA "), desc: "Sains Menengah" },
+            { jenjang: "SMP", judul: "IPA SMP", folder: "smp", cover: "cover/cover7.png", pages: genPages(7, "IPA "), desc: "Sains Menengah" },
+            { jenjang: "SMA", judul: "Kimia SMA", folder: "sma", cover: "cover/cover1.png", pages: genPages(8, "Kimia 1 SMA_Page_"), desc: "Reaksi Kimia" },
+            { jenjang: "SMA", judul: "Kimia SMA", folder: "sma", cover: "cover/cover2.png", pages: genPages(8, "Kimia 1 SMA_Page_"), desc: "Reaksi Kimia" },
+            { jenjang: "SMA", judul: "Kimia SMA", folder: "sma", cover: "cover/cover3.png", pages: genPages(8, "Kimia 1 SMA_Page_"), desc: "Reaksi Kimia" },
+            { jenjang: "SMA", judul: "Kimia SMA", folder: "sma", cover: "cover/cover4.png", pages: genPages(8, "Kimia 1 SMA_Page_"), desc: "Reaksi Kimia" },
+            { jenjang: "SMA", judul: "Kimia SMA", folder: "sma", cover: "cover/cover5.png", pages: genPages(8, "Kimia 1 SMA_Page_"), desc: "Reaksi Kimia" },
+            { jenjang: "SMA", judul: "Kimia SMA", folder: "sma", cover: "cover/cover6.png", pages: genPages(8, "Kimia 1 SMA_Page_"), desc: "Reaksi Kimia" },
+            { jenjang: "SMA", judul: "Kimia SMA", folder: "sma", cover: "cover/cover7.png", pages: genPages(8, "Kimia 1 SMA_Page_"), desc: "Reaksi Kimia" },
+            { jenjang: "SMK", judul: "Tehnik Permesinan", folder: "smk", cover: "cover/cover1.png", pages: genPages(8, "Kimia 1 SMA_Page_"), desc: "Reaksi Kimia" },
+            { jenjang: "SMK", judul: "Tehnik Permesinan", folder: "smk", cover: "cover/cover2.png", pages: genPages(8, "Kimia 1 SMA_Page_"), desc: "Reaksi Kimia" },
+            { jenjang: "SMK", judul: "Tehnik Permesinan", folder: "smk", cover: "cover/cover3.png", pages: genPages(8, "Kimia 1 SMA_Page_"), desc: "Reaksi Kimia" },
+            { jenjang: "SMK", judul: "Tehnik Permesinan", folder: "smk", cover: "cover/cover4.png", pages: genPages(8, "Kimia 1 SMA_Page_"), desc: "Reaksi Kimia" },
+            { jenjang: "SMK", judul: "Tehnik Permesinan", folder: "smk", cover: "cover/cover5.png", pages: genPages(8, "Kimia 1 SMA_Page_"), desc: "Reaksi Kimia" },
+            { jenjang: "SMK", judul: "Tehnik Permesinan", folder: "smk", cover: "cover/cover6.png", pages: genPages(8, "Kimia 1 SMA_Page_"), desc: "Reaksi Kimia" },
+            { jenjang: "SMK", judul: "Tehnik Permesinan", folder: "smk", cover: "cover/cover7.png", pages: genPages(8, "Kimia 1 SMA_Page_"), desc: "Reaksi Kimia" },
+            { jenjang: "SMK", judul: "Tehnik Permesinan", folder: "smk", cover: "cover/cover8.png", pages: genPages(8, "Kimia 1 SMA_Page_"), desc: "Reaksi Kimia" },
+            { jenjang: "Madrasah", judul: "MI Madrasah", folder: "madrasah", cover: "cover/cover1.png", pages: genPages(7, "mi-"), desc: "Katalog Religi" },
+            { jenjang: "Madrasah", judul: "MI Madrasah", folder: "madrasah", cover: "cover/cover2.png", pages: genPages(7, "mi-"), desc: "Katalog Religi" },
+            { jenjang: "Madrasah", judul: "MI Madrasah", folder: "madrasah", cover: "cover/cover3.png", pages: genPages(7, "mi-"), desc: "Katalog Religi" },
+            { jenjang: "Madrasah", judul: "MI Madrasah", folder: "madrasah", cover: "cover/cover4.png", pages: genPages(7, "mi-"), desc: "Katalog Religi" },
+            { jenjang: "Madrasah", judul: "MI Madrasah", folder: "madrasah", cover: "cover/cover5.png", pages: genPages(7, "mi-"), desc: "Katalog Religi" },
+            { jenjang: "Madrasah", judul: "MI Madrasah", folder: "madrasah", cover: "cover/cover6.png", pages: genPages(7, "mi-"), desc: "Katalog Religi" },
+            { jenjang: "Madrasah", judul: "MI Madrasah", folder: "madrasah", cover: "cover/cover7.png", pages: genPages(7, "mi-"), desc: "Katalog Religi" },
+            { jenjang: "Madrasah", judul: "MI Madrasah", folder: "madrasah", cover: "cover/cover8.png", pages: genPages(7, "mi-"), desc: "Katalog Religi" },
+            { jenjang: "Prime", judul: "Tehnik Permesinan", folder: "prime", cover: "cover/cover1.png", pages: genPages(8, "Kimia 1 SMA_Page_"), desc: "Reaksi Kimia" },
+            { jenjang: "Prime", judul: "Tehnik Permesinan", folder: "prime", cover: "cover/cover2.png", pages: genPages(8, "Kimia 1 SMA_Page_"), desc: "Reaksi Kimia" },
+            { jenjang: "Prime", judul: "Tehnik Permesinan", folder: "prime", cover: "cover/cover3.png", pages: genPages(8, "Kimia 1 SMA_Page_"), desc: "Reaksi Kimia" },
+            { jenjang: "Prime", judul: "Tehnik Permesinan", folder: "prime", cover: "cover/cover4.png", pages: genPages(8, "Kimia 1 SMA_Page_"), desc: "Reaksi Kimia" },
+            { jenjang: "Prime", judul: "Tehnik Permesinan", folder: "prime", cover: "cover/cover5.png", pages: genPages(8, "Kimia 1 SMA_Page_"), desc: "Reaksi Kimia" },
+            { jenjang: "Prime", judul: "Tehnik Permesinan", folder: "prime", cover: "cover/cover6.png", pages: genPages(8, "Kimia 1 SMA_Page_"), desc: "Reaksi Kimia" },
+            { jenjang: "Prime", judul: "Tehnik Permesinan", folder: "prime", cover: "cover/cover7.png", pages: genPages(8, "Kimia 1 SMA_Page_"), desc: "Reaksi Kimia" },
+            { jenjang: "Prime", judul: "Tehnik Permesinan", folder: "prime", cover: "cover/cover8.png", pages: genPages(8, "Kimia 1 SMA_Page_"), desc: "Reaksi Kimia" },
+            { jenjang: "Prime", judul: "Tehnik Permesinan", folder: "prime", cover: "cover/cover9.png", pages: genPages(8, "Kimia 1 SMA_Page_"), desc: "Reaksi Kimia" }
         ];
 
         let currentActivePage = 'hero';
@@ -198,6 +219,7 @@
         let activeJenjang = "";
         let filteredData = [];
         const radius = 160;
+        let flipInstance = null;
 
         function navigateTo(id) {
             currentActivePage = id;
@@ -234,6 +256,7 @@
             document.getElementById('search-input').value = "";
             document.getElementById('katalog-label').innerText = "KATALOG " + activeJenjang;
             filteredData = dataBuku.filter(b => b.jenjang === activeJenjang);
+            currentRotation = 0;
             renderWheel();
         }
 
@@ -247,10 +270,7 @@
         function renderWheel() {
             const wheel = document.getElementById('wheel-buku');
             wheel.innerHTML = "";
-            if(filteredData.length === 0) {
-                wheel.innerHTML = "<p style='text-align:center; opacity:0.5'>Buku tidak ditemukan</p>";
-                return;
-            }
+            if(filteredData.length === 0) return;
             const theta = 360 / Math.max(filteredData.length, 10);
             filteredData.forEach((book, i) => {
                 const card = document.createElement('div');
@@ -260,7 +280,9 @@
                 card.innerHTML = `<div class="book-content"><h3>${book.judul}</h3><p>${book.desc}</p></div>`;
                 card.onclick = () => {
                     const activeIdx = Math.round(-currentRotation / theta);
-                    if (i === (activeIdx % filteredData.length + filteredData.length) % filteredData.length) openViewer(book);
+                    const normalizedIdx = ((i % filteredData.length) + filteredData.length) % filteredData.length;
+                    const normalizedActive = ((activeIdx % filteredData.length) + filteredData.length) % filteredData.length;
+                    if (normalizedIdx === normalizedActive) openViewer(book);
                 };
                 wheel.appendChild(card);
             });
@@ -277,22 +299,20 @@
                 const isCenter = Math.abs(relRot) < 15 || Math.abs(relRot) > 345;
                 card.style.opacity = isCenter ? "1" : "0.2";
                 card.style.filter = isCenter ? "blur(0px)" : "blur(2px)";
+                card.style.pointerEvents = isCenter ? "auto" : "none";
             });
         }
 
-        // LOGIKA SWIPE & MOUSE GABUNGAN
-        let isMoving = false;
-        let startPos = 0;
+        let isMoving = false; let startPos = 0;
         const swipeArea = document.getElementById('swipe-area');
 
-        // Fungsi Mulai (Mouse & Touch)
         const startAction = (e) => {
+            if (document.getElementById('modal-viewer').style.display === 'flex') return;
             isMoving = true;
             startPos = e.pageY || e.touches[0].pageY;
-            document.getElementById('wheel-buku').style.transition = 'none'; // Matikan transisi saat geser manual
+            document.getElementById('wheel-buku').style.transition = 'none';
         };
 
-        // Fungsi Geser (Mouse & Touch)
         const moveAction = (e) => {
             if (!isMoving || filteredData.length === 0) return;
             const currentY = e.pageY || e.touches[0].pageY;
@@ -303,59 +323,91 @@
             if(e.cancelable) e.preventDefault();
         };
 
-        // Fungsi Berhenti (Mouse & Touch)
         const endAction = () => {
-            if (!isMoving) return;
             isMoving = false;
             const wheel = document.getElementById('wheel-buku');
+            if(!wheel) return;
             wheel.style.transition = 'transform 0.4s cubic-bezier(0.23, 1, 0.32, 1)';
             const theta = 360 / Math.max(filteredData.length, 10);
             currentRotation = Math.round(currentRotation / theta) * theta;
             updateWheelPosition();
         };
 
-        // Pasang Event Listeners
         swipeArea.addEventListener('mousedown', startAction);
         window.addEventListener('mousemove', moveAction);
         window.addEventListener('mouseup', endAction);
-
         swipeArea.addEventListener('touchstart', startAction, {passive: false});
         swipeArea.addEventListener('touchmove', moveAction, {passive: false});
         swipeArea.addEventListener('touchend', endAction);
 
-        // Keyboard tetap jalan
         window.addEventListener('keydown', (e) => {
             if (currentActivePage !== 'page-katalog' || filteredData.length === 0) return;
+            if (document.getElementById('modal-viewer').style.display === 'flex') return;
+            
             const theta = 360 / Math.max(filteredData.length, 10);
-            document.getElementById('wheel-buku').style.transition = 'transform 0.4s cubic-bezier(0.23, 1, 0.32, 1)';
+            const wheel = document.getElementById('wheel-buku');
+            wheel.style.transition = 'transform 0.4s cubic-bezier(0.23, 1, 0.32, 1)';
+            
             if (e.key === "ArrowUp") currentRotation -= theta;
             else if (e.key === "ArrowDown") currentRotation += theta;
+            else if (e.key === "Enter") {
+                const activeIdx = Math.round(-currentRotation / theta);
+                const normalizedActive = ((activeIdx % filteredData.length) + filteredData.length) % filteredData.length;
+                openViewer(filteredData[normalizedActive]);
+            }
             updateWheelPosition();
         });
 
-        let flipInstance = null;
         function openViewer(buku) {
             const modal = document.getElementById('modal-viewer');
+            if (modal.style.display === 'flex') return;
+
             const fbElem = document.getElementById('flipbook-element');
             fbElem.innerHTML = "";
-            buku.pages.forEach(p => {
-                const div = document.createElement('div'); div.className = 'page';
-                div.innerHTML = `<img src="${buku.folder}/${p}" style="width:100%; height:100%; object-fit:contain">`;
+
+            const addPage = (src, isCover = false) => {
+                const div = document.createElement('div');
+                div.className = isCover ? 'page page-cover' : 'page';
+                div.innerHTML = src.includes('<div') ? src : `<img src="${src}" style="width:100%; height:100%; object-fit:contain" onerror="this.src='cover/no-image.png'">`;
                 fbElem.appendChild(div);
-            });
+            };
+
+            addPage(buku.cover, true);
+            buku.pages.forEach(p => addPage(`${buku.folder}/${p}`));
+            addPage(`<div style="width:100%; height:100%; background:#111; display:flex; justify-content:center; align-items:center;"><p style="color:#555">yuDigital</p></div>`, true);
+
             modal.style.display = 'flex';
             setTimeout(() => {
                 const w = window.innerWidth, h = window.innerHeight;
                 let bW = w > 800 ? 500 : w * 0.9, bH = bW * 1.45;
                 if (bH > h * 0.85) { bH = h * 0.85; bW = bH / 1.45; }
-                flipInstance = new St.PageFlip(fbElem, { width: bW, height: bH, size: "fixed", usePortrait: true });
+                
+                if (flipInstance) flipInstance.destroy();
+                flipInstance = new St.PageFlip(fbElem, { 
+                    width: bW, height: bH, size: "fixed", 
+                    usePortrait: true, showCover: true, mobileScrollSupport: false
+                });
                 flipInstance.loadFromHTML(document.querySelectorAll('.page'));
-            }, 300);
+            }, 200);
         }
 
         function closeViewer() {
-            document.getElementById('modal-viewer').style.display = 'none';
-            if (flipInstance) { flipInstance.destroy(); flipInstance = null; }
+            const modal = document.getElementById('modal-viewer');
+            modal.style.display = 'none';
+            
+            if (flipInstance) {
+                try { flipInstance.destroy(); } catch (e) {}
+                flipInstance = null;
+            }
+            
+            // RESET TOTAL ELEMENT UNTUK MENGHAPUS SEMUA EVENT LISTENER BAWAAN LIBRARY
+            const viewport = document.getElementById('book-viewport');
+            viewport.innerHTML = '<div id="flipbook-element"></div>';
+            
+            // Kembalikan interaksi
+            isMoving = false;
+            window.focus(); 
+            updateWheelPosition();
         }
 
         window.onload = () => {
