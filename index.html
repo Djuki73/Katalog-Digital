@@ -9,258 +9,345 @@
     <style>
         :root {
             --hero-grad: linear-gradient(135deg, #7f00ff, #e100ff);
-            --glass: rgba(255, 255, 255, 0.9);
-            --text-dark: #2d3436;
+            --bg-stage: radial-gradient(circle at top right, #2a0845, #000000);
         }
 
         body {
             font-family: 'Poppins', sans-serif;
             margin: 0;
-            background: #f8f9fa;
-            color: var(--text-dark);
-            overflow-x: hidden;
+            background-color: #000;
+            background-image: var(--bg-stage), radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+            background-size: 100% 100%, 35px 35px;
+            color: white;
+            overflow: hidden;
+            height: 100vh;
         }
 
-        /* Splash Screen */
-        #splash {
+        /* 1. Splash Screen */
+        #splash-screen {
             position: fixed; width: 100%; height: 100vh; background: white;
             display: flex; justify-content: center; align-items: center; z-index: 10000;
-            transition: opacity 0.8s ease-in-out;
+            transition: opacity 0.8s ease;
         }
 
-        /* Navbar */
+        /* 2. Navbar */
         nav {
-            padding: 15px 8%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--glass);
-            backdrop-filter: blur(10px);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            padding: 15px 8%; display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(15px);
+            position: fixed; top: 0; width: 84%; z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-
         .logo-text { font-size: 24px; font-weight: 800; background: var(--hero-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; cursor: pointer; }
 
-        /* Hero Section */
-        #hero-section {
-            min-height: 85vh;
-            background: var(--hero-grad);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            padding: 0 10%;
-            clip-path: ellipse(150% 100% at 50% 0%);
-            gap: 50px;
+        /* 3. Hero Section */
+        #section-hero {
+            height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+            background: var(--hero-grad); padding: 0 20px;
         }
+        .hero-img {
+            max-width: 500px; width: 70%; height: auto; margin: 15px 0;
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.3));
+        }
+        .cta-btn { padding: 15px 45px; background: white; color: #7f00ff; border-radius: 50px; font-weight: 800; cursor: pointer; border: none; font-size: 1rem; box-shadow: 0 10px 20px rgba(0,0,0,0.2); transition: 0.3s; }
 
-        .hero-text { flex: 1; max-width: 600px; display: flex; flex-direction: column; }
-        .hero-text h1 { font-size: clamp(2.2rem, 5vw, 4rem); margin-bottom: 20px; line-height: 1.1; font-weight: 800; }
-        .hero-text p { font-size: 1.1rem; opacity: 0.95; margin-bottom: 35px; }
+        /* 4. Main App Container */
+        #main-app-container { display: none; height: 100vh; position: relative; padding-top: 80px; box-sizing: border-box; }
+        .app-page { display: none; height: 100%; width: 100%; position: relative; overflow: hidden; }
+
+        /* 5. JENJANG GRID (OPTIMASI HP) */
+        .jenjang-grid {
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); /* Maksa 2 kolom di HP agar muat */
+            gap: 12px; 
+            padding: 10px 5%; 
+            max-width: 1000px; 
+            margin: 0 auto;
+            height: calc(100vh - 160px); /* Membatasi tinggi agar tidak scroll */
+            align-content: center;
+        }
         
-        .hero-image { flex: 1; display: flex; justify-content: center; }
-        .hero-image img { width: 100%; max-width: 500px; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.25)); animation: float 5s ease-in-out infinite; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        .jenjang-card {
+            height: 100%;
+            min-height: 120px;
+            max-height: 180px; /* Batasi tinggi kartu agar pas 1 layar */
+            border-radius: 18px; 
+            background-size: cover; 
+            background-position: center;
+            position: relative; 
+            overflow: hidden; 
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .jenjang-card:hover { transform: scale(1.02); }
+        .jenjang-card::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.85; z-index: 1; }
+        .jenjang-info { position: absolute; bottom: 15px; left: 15px; z-index: 2; color: #1a1a1a; }
+        .jenjang-info h3 { margin: 0; font-size: 1.2rem; font-weight: 800; }
 
-        .cta-btn {
-            align-self: flex-start; padding: 16px 40px; background: white;
-            color: #7f00ff; border-radius: 50px; text-decoration: none;
-            font-weight: 800; box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            cursor: pointer; transition: 0.3s;
+        /* Desktop View: Kembali ke 3 kolom jika layar lebar */
+        @media (min-width: 768px) {
+            .jenjang-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+            .jenjang-card { height: 180px; }
         }
 
-        /* Main Content */
-        #main-content { display: none; padding: 40px 8%; text-align: center; }
-        .grid-layout { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        @media (min-width: 768px) { .grid-layout { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 25px; } }
+        /* 6. WHEEL PICKER STABIL */
+        .wheel-page-container {
+            height: calc(100% - 220px); perspective: 2000px; position: relative; overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .wheel-container {
+            position: absolute; width: 100%; max-width: 450px; height: 450px;
+            transform-style: preserve-3d; cursor: grab; transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .book-list-card {
+            position: absolute; width: 90%; height: 75px; left: 5%; top: 187px;
+            background-size: cover; background-position: center; border-radius: 15px;
+            display: flex; align-items: center; padding: 0 25px;
+            backface-visibility: hidden; border: 1px solid rgba(255,255,255,0.1); box-sizing: border-box;
+        }
+        .book-list-card::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(90deg, rgba(0,0,0,0.85) 30%, rgba(0,0,0,0.1)); border-radius: 15px;
+        }
+        .book-content { position: relative; z-index: 2; margin-top: 6px; }
+        .book-content h3 { margin: 0; font-size: 0.9rem; line-height: 1.2; }
+        .book-content p { margin: 2px 0 0 0; font-size: 0.65rem; opacity: 0.7; }
 
-        .card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); cursor: pointer; transition: 0.3s; }
-        .card:hover { transform: translateY(-5px); }
-        .card img.cover-img { width: 100%; height: 200px; object-fit: cover; }
-        .card-info { padding: 15px; font-size: 0.85rem; font-weight: 600; }
+        .selection-highlight {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 95%; max-width: 480px; height: 85px;
+            border-top: 1px solid rgba(255,255,255,0.15); border-bottom: 1px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.03); pointer-events: none; z-index: 1;
+        }
 
-        .nav-controls { margin-bottom: 30px; display: flex; gap: 10px; }
-        .btn-nav { padding: 10px 20px; border-radius: 30px; border: none; background: #eee; cursor: pointer; font-weight: 600; font-family: inherit; }
+        /* 7. Katalog Header & Footer */
+        .katalog-header { text-align: center; padding: 10px 0; z-index: 10; position: relative; }
+        .page-title { margin: 0; font-size: 1.1rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
+        .search-container { margin: 10px auto; width: 85%; max-width: 350px; position: relative; }
+        .search-input {
+            width: 100%; padding: 8px 18px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.1); color: white; outline: none; font-family: 'Poppins', sans-serif;
+            backdrop-filter: blur(5px); box-sizing: border-box;
+        }
+        .katalog-footer { position: absolute; bottom: 25px; width: 100%; text-align: center; z-index: 10; }
+        .btn-back { padding: 10px 30px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white; cursor: pointer; }
 
-        /* Modal & Flipbook Proporsional */
-        .modal {
+        /* Modal Viewer */
+        .modal-viewer {
             display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); justify-content: center; align-items: center;
+            background: rgba(0,0,0,0.98); justify-content: center; align-items: center;
         }
-        .close-btn { position: absolute; top: 15px; right: 20px; color: white; font-size: 35px; cursor: pointer; z-index: 2100; }
-        #book-container { width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center; }
-        
-        .page { background-color: #000; display: flex; justify-content: center; align-items: center; }
-        .page img { width: 100%; height: 100%; object-fit: contain; } /* Kunci Proporsional */
-
-        .fade-in { animation: fadeIn 0.5s forwards; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        @media (max-width: 900px) {
-            #hero-section { flex-direction: column; text-align: center; padding: 80px 5% 40px; }
-            .hero-text { align-items: center; }
-            .cta-btn { align-self: center; }
-        }
+        .close-btn { position: absolute; top: 15px; right: 20px; color: white; font-size: 35px; cursor: pointer; z-index: 2200; }
     </style>
 </head>
 <body>
 
-    <div id="splash"><img src="Bumper-Yudigital.gif" width="180"></div>
+    <div id="splash-screen"><img src="Bumper-Yudigital.gif" width="140"></div>
 
-    <nav>
-        <div class="logo-text" onclick="location.reload()">yuDigital</div>
-        <div style="font-size: 12px; color: #636e72;">Indonesia</div>
-    </nav>
+    <nav><div class="logo-text" onclick="location.reload()">yuDigital</div></nav>
 
-    <header id="hero-section">
-        <div class="hero-text">
-            <h1>Digitalize Your Learning</h1>
-            <p>Akses katalog pendidikan interaktif dengan pengalaman membaca yang lebih modern.</p>
-            <div class="cta-btn" onclick="startApp()">Mulai Sekarang</div>
-        </div>
-        <div class="hero-image">
-            <img src="komp&Tablet.png" alt="yuDigital">
-        </div>
-    </header>
+    <section id="section-hero">
+        <h1 style="font-size: 2.8rem; margin: 0;">yuDigital</h1>
+        <p style="opacity: 0.9; margin: 5px 0; font-size: 0.9rem;">Pusat Literasi Digital Terpadu</p>
+        <img src="komp&Tablet.png" class="hero-img" alt="Device Preview">
+        <button class="cta-btn" onclick="navigateTo('page-jenjang')">Masuk Katalog</button>
+    </section>
 
-    <main id="main-content">
-        <div class="nav-controls">
-            <button id="btnBackHome" class="btn-nav" onclick="location.reload()">← Home</button>
-            <button id="btnBackJenjang" class="btn-nav" onclick="showMainJenjang()" style="display:none;">← Pilih Jenjang</button>
-        </div>
-        <h2 id="sectionTitle">Pilih Jenjang</h2>
-        <div class="grid-layout" id="content-area"></div>
+    <main id="main-app-container">
+        <section id="page-jenjang" class="app-page">
+            <div class="page-title" style="text-align:center; padding-top:15px; font-size: 1rem;">Pilih Jenjang</div>
+            <div class="jenjang-grid" id="jenjang-container"></div>
+        </section>
+
+        <section id="page-katalog" class="app-page">
+            <div class="katalog-header">
+                <div class="page-title" id="katalog-label">Katalog</div>
+                <div class="search-container">
+                    <input type="text" id="search-input" class="search-input" placeholder="Cari judul buku..." oninput="filterBuku()">
+                </div>
+            </div>
+            <div class="wheel-page-container">
+                <div class="selection-highlight"></div>
+                <div id="wheel-buku" class="wheel-container"></div>
+            </div>
+            <div class="katalog-footer">
+                <button class="btn-back" onclick="navigateTo('page-jenjang')">← KEMBALI</button>
+            </div>
+        </section>
     </main>
 
-    <div id="bookModal" class="modal">
-        <span class="close-btn" onclick="closeModal()">&times;</span>
-        <div id="book-container"><div id="flipbook"></div></div>
+    <div id="modal-viewer" class="modal-viewer">
+        <span class="close-btn" onclick="closeViewer()">&times;</span>
+        <div id="book-viewport"><div id="flipbook-element"></div></div>
     </div>
 
     <script>
-        // Generator Nama File Otomatis
-        const gen = (n, prefix) => Array.from({ length: n }, (_, i) => `${prefix}${i + 1}.webp`);
-
+        const genPages = (n, prefix) => Array.from({ length: n }, (_, i) => `${prefix}${i + 1}.webp`);
         const dataBuku = [
-            // SD
-            { jenjang: "SD", judul: "IPAS 3 SD", folder: "sd/IPAS", cover: "sd/IPAS/coverIPAS3.webp", pages: gen(10, "IPAS 3 SD_Page_") },
-            { jenjang: "SD", judul: "Bahasa Indonesia", folder: "sd/Bhs", cover: "sd/Bhs/coverBHS.webp", pages: gen(10, "BHs 1 SD Kls I_Page_") },
-            { jenjang: "SD", judul: "Matematika 2SD", folder: "sd/matematika 2SD", cover: "sd/matematika 2SD/coverIMtk2.webp", pages: gen(10, "MTK 2 SD_Page_") },
-            { jenjang: "SD", judul: "Pancasila SD", folder: "sd/Pancasila", cover: "sd/Pancasila/coverPancasila.webp", pages: gen(10, "Pendidikan Pancasila 4 SD_Page_") },
-            
-            // SMP
-            { jenjang: "SMP", judul: "IPA SMP", folder: "smp", cover: "smp/IPA 1 SMP.webp", pages: gen(7, "IPA ") },
-            
-            // SMA
-            { jenjang: "SMA", judul: "Kimia SMA", folder: "sma", cover: "sma/Kimia 1 SMA_Page_1.webp", pages: gen(8, "Kimia 1 SMA_Page_") },
-            
-            // MADRASAH
-            { jenjang: "Madrasah", judul: "MI Madrasah", folder: "madrasah", cover: "madrasah/mi-1.webp", pages: gen(7, "mi-") },
-            { jenjang: "Madrasah", judul: "MTs Madrasah", folder: "madrasah", cover: "madrasah/mts-1.webp", pages: gen(7, "mts-") }
+            { jenjang: "SD", judul: "IPAS 3 SD Kls III", folder: "sd/IPAS", cover: "cover/cover1.png", pages: genPages(8, "IPAS 3 SD_Page_"), desc: "Kurikulum Merdeka" },
+            { jenjang: "SD", judul: "IPAS 5 SD Kls V", folder: "sd/IPAS", cover: "cover/cover2.png", pages: genPages(8, "IPAS 3 SD_Page_"), desc: "Kurikulum Merdeka" },
+            { jenjang: "SD", judul: "Bahasa Indonesia 1 SD Kls I", folder: "sd/Bhs", cover: "cover/cover3.png", pages: genPages(6, "Bhs-"), desc: "Literasi Dasar" },
+            { jenjang: "SD", judul: "Bahasa Indonesia 2 SD Kls II", folder: "sd/Bhs", cover: "cover/cover4.png", pages: genPages(6, "Bhs-"), desc: "Literasi Dasar" },
+            { jenjang: "SD", judul: "Basic English 1 SD Kls I", folder: "sd/IPAS", cover: "cover/cover5.png", pages: genPages(8, "IPAS 3 SD_Page_"), desc: "Kurikulum Merdeka" },
+            { jenjang: "SD", judul: "Matematika 1 SD Kls I", folder: "sd/Bhs", cover: "cover/cover6.png", pages: genPages(6, "Bhs-"), desc: "Literasi Dasar" },
+            { jenjang: "SD", judul: "Matematika 2 SD Kls II", folder: "sd/IPAS", cover: "cover/cover7.png", pages: genPages(8, "IPAS 3 SD_Page_"), desc: "Kurikulum Merdeka" },
+            { jenjang: "SD", judul: "Matematika 3 SD Kls III", folder: "sd/Bhs", cover: "cover/cover8.png", pages: genPages(6, "Bhs-"), desc: "Literasi Dasar" },
+            { jenjang: "SD", judul: "Pendidikan Pancasila 1 SD Kls I", folder: "sd/IPAS", cover: "cover/cover9.png", pages: genPages(8, "IPAS 3 SD_Page_"), desc: "Kurikulum Merdeka" },
+            { jenjang: "SD", judul: "Pendidikan Pancasila 4 SD Kls IV", folder: "sd/Bhs", cover: "cover/cover10.png", pages: genPages(6, "Bhs-"), desc: "Literasi Dasar" },
+            { jenjang: "SD", judul: "Pendidikan Pancasila 5 SD Kls V", folder: "sd/IPAS", cover: "cover/cover1.png", pages: genPages(8, "IPAS 3 SD_Page_"), desc: "Kurikulum Merdeka" },
+            { jenjang: "SD", judul: "Pendidikan Pancasila 6 SD Kls VI", folder: "sd/Bhs", cover: "cover/cover2.png", pages: genPages(6, "Bhs-"), desc: "Literasi Dasar" },
+            { jenjang: "SMP", judul: "IPA SMP", folder: "smp", cover: "smp/IPA 1 SMP.webp", pages: genPages(7, "IPA "), desc: "Sains Menengah" },
+            { jenjang: "SMA", judul: "Kimia SMA", folder: "sma", cover: "sma/Kimia 1 SMA_Page_1.webp", pages: genPages(8, "Kimia 1 SMA_Page_"), desc: "Reaksi Kimia" },
+            { jenjang: "SMK", judul: "Tehnik Permesinan", folder: "smk", cover: "smk/Kimia 1 SMA_Page_1.webp", pages: genPages(8, "Kimia 1 SMA_Page_"), desc: "Reaksi Kimia" },
+            { jenjang: "Madrasah", judul: "MI Madrasah", folder: "madrasah", cover: "madrasah/mi-1.webp", pages: genPages(7, "mi-"), desc: "Katalog Religi" }
         ];
 
-        let flipInstance = null;
+        let currentActivePage = 'hero';
+        let currentRotation = 0;
+        let activeJenjang = "";
+        let filteredData = [];
+        const radius = 160;
 
-        function startApp() {
-            document.getElementById('hero-section').style.display = 'none';
-            document.getElementById('main-content').style.display = 'block';
-            showMainJenjang();
+        function navigateTo(id) {
+            currentActivePage = id;
+            document.getElementById('section-hero').style.display = (id === 'section-hero') ? 'flex' : 'none';
+            document.getElementById('main-app-container').style.display = (id === 'section-hero') ? 'none' : 'block';
+            document.querySelectorAll('.app-page').forEach(p => p.style.display = 'none');
+            document.getElementById(id).style.display = 'block';
+            if(id === 'page-jenjang') renderJenjangCards();
         }
 
-        function showMainJenjang() {
-            document.getElementById('btnBackJenjang').style.display = "none";
-            document.getElementById('btnBackHome').style.display = "block";
-            document.getElementById('sectionTitle').innerText = "Pilih Jenjang";
-            const contentArea = document.getElementById('content-area');
-            contentArea.innerHTML = "";
-            
+        function renderJenjangCards() {
+            const container = document.getElementById('jenjang-container');
+            container.innerHTML = "";
             const jenjangs = [
-                { name: "SD", img: "sd/coverSD.gif" },
-                { name: "SMP", img: "sd/coverSD.gif" },
-                { name: "SMA", img: "sd/coverSD.gif" },
-                { name: "Madrasah", img: "sd/coverSD.gif" }
+                { name: "SD", img: "sd/coverSD.webp", color: "#E3F2FD" },
+                { name: "SMP", img: "smp/coverSMP.webp", color: "#FCE4EC" },
+                { name: "SMA", img: "sma/coverSMA.webp", color: "#E8F5E9" },
+                { name: "SMK", img: "smk/coverSMK.webp", color: "#E8F5E9" },
+                { name: "Madrasah", img: "madrasah/coverMadrasah.webp", color: "#FFF3E0" },
+                { name: "Prime", img: "prime/coverSMA.webp", color: "#E8F5E9" }
             ];
-
             jenjangs.forEach(j => {
                 const card = document.createElement('div');
-                card.className = 'card fade-in';
-                card.innerHTML = `<img src="${j.img}" class="cover-img"><div class="card-info"><h3>Katalog ${j.name}</h3></div>`;
-                card.onclick = () => showBooks(j.name);
-                contentArea.appendChild(card);
+                card.className = 'jenjang-card';
+                card.style.backgroundImage = `url('${j.img}')`;
+                card.innerHTML = `<style>.jenjang-card::after{background:${j.color}}</style><div class="jenjang-info"><h3>${j.name}</h3></div>`;
+                card.onclick = () => { activeJenjang = j.name; showKatalogBuku(); };
+                container.appendChild(card);
             });
         }
 
-        function showBooks(jenjang) {
-            document.getElementById('btnBackHome').style.display = "none";
-            document.getElementById('btnBackJenjang').style.display = "block";
-            document.getElementById('sectionTitle').innerText = "Katalog " + jenjang;
-            const contentArea = document.getElementById('content-area');
-            contentArea.innerHTML = "";
-            dataBuku.filter(b => b.jenjang === jenjang).forEach(b => {
+        function showKatalogBuku() {
+            navigateTo('page-katalog');
+            document.getElementById('search-input').value = "";
+            document.getElementById('katalog-label').innerText = "KATALOG " + activeJenjang;
+            filteredData = dataBuku.filter(b => b.jenjang === activeJenjang);
+            renderWheel();
+        }
+
+        function filterBuku() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            filteredData = dataBuku.filter(b => b.jenjang === activeJenjang && b.judul.toLowerCase().includes(query));
+            currentRotation = 0;
+            renderWheel();
+        }
+
+        function renderWheel() {
+            const wheel = document.getElementById('wheel-buku');
+            wheel.innerHTML = "";
+            if(filteredData.length === 0) {
+                wheel.innerHTML = "<p style='text-align:center; opacity:0.5'>Buku tidak ditemukan</p>";
+                return;
+            }
+            const theta = 360 / Math.max(filteredData.length, 10);
+            filteredData.forEach((book, i) => {
                 const card = document.createElement('div');
-                card.className = 'card fade-in';
-                card.innerHTML = `<img src="${b.cover}" class="cover-img"><div class="card-info"><h3>${b.judul}</h3></div>`;
-                card.onclick = () => openFlipbook(b);
-                contentArea.appendChild(card);
+                card.className = 'book-list-card';
+                card.style.backgroundImage = `url('${book.cover}')`;
+                card.style.transform = `rotateX(${-i * theta}deg) translateZ(${radius}px)`;
+                card.innerHTML = `<div class="book-content"><h3>${book.judul}</h3><p>${book.desc}</p></div>`;
+                card.onclick = () => {
+                    const activeIdx = Math.round(-currentRotation / theta);
+                    if (i === (activeIdx % filteredData.length + filteredData.length) % filteredData.length) openViewer(book);
+                };
+                wheel.appendChild(card);
             });
-            window.scrollTo(0,0);
+            updateWheelPosition();
         }
 
-        function openFlipbook(buku) {
-            const modal = document.getElementById('bookModal');
-            const container = document.getElementById('book-container');
-            container.innerHTML = '<div id="flipbook"></div>';
-            const fbElem = document.getElementById('flipbook');
-
-            buku.pages.forEach(p => {
-                const pElem = document.createElement('div');
-                pElem.className = 'page';
-                pElem.innerHTML = `<img src="${buku.folder}/${p}" loading="eager">`;
-                fbElem.appendChild(pElem);
+        function updateWheelPosition() {
+            const wheel = document.getElementById('wheel-buku');
+            wheel.style.transform = `rotateX(${currentRotation}deg)`;
+            const theta = 360 / Math.max(filteredData.length, 10);
+            wheel.querySelectorAll('.book-list-card').forEach((card, i) => {
+                const relRot = (currentRotation - (i * theta)) % 360;
+                const isCenter = Math.abs(relRot) < 15 || Math.abs(relRot) > 345;
+                card.style.opacity = isCenter ? "1" : "0.2";
+                card.style.filter = isCenter ? "blur(0px)" : "blur(2px)";
             });
+        }
 
+        window.addEventListener('keydown', (e) => {
+            if (currentActivePage !== 'page-katalog' || filteredData.length === 0) return;
+            const theta = 360 / Math.max(filteredData.length, 10);
+            if (e.key === "ArrowUp") currentRotation -= theta;
+            else if (e.key === "ArrowDown") currentRotation += theta;
+            else if (e.key === "Enter") {
+                const activeIdx = Math.round(-currentRotation / theta);
+                const normIdx = (activeIdx % filteredData.length + filteredData.length) % filteredData.length;
+                openViewer(filteredData[normIdx]);
+            }
+            updateWheelPosition();
+        });
+
+        let isDragging = false, startY = 0;
+        const wheelArea = document.querySelector('.wheel-page-container');
+        wheelArea.onmousedown = (e) => { isDragging = true; startY = e.pageY; };
+        window.onmousemove = (e) => {
+            if (!isDragging || filteredData.length === 0) return;
+            currentRotation += (startY - e.pageY) * 0.3;
+            updateWheelPosition();
+            startY = e.pageY;
+        };
+        window.onmouseup = () => {
+            if(!isDragging) return; isDragging = false;
+            const theta = 360 / Math.max(filteredData.length, 10);
+            currentRotation = Math.round(currentRotation / theta) * theta;
+            updateWheelPosition();
+        };
+
+        let flipInstance = null;
+        function openViewer(buku) {
+            const modal = document.getElementById('modal-viewer');
+            const fbElem = document.getElementById('flipbook-element');
+            fbElem.innerHTML = "";
+            buku.pages.forEach(p => {
+                const div = document.createElement('div'); div.className = 'page';
+                div.innerHTML = `<img src="${buku.folder}/${p}" style="width:100%; height:100%; object-fit:contain">`;
+                fbElem.appendChild(div);
+            });
             modal.style.display = 'flex';
-
             setTimeout(() => {
-                const winW = window.innerWidth;
-                const winH = window.innerHeight;
-
-                // Logika Perhitungan Proporsional (Rasio 1 : 1.45)
-                let bWidth = winW > 800 ? 520 : winW * 0.92;
-                let bHeight = bWidth * 1.45;
-
-                // Jika tinggi melebihi layar, sesuaikan berdasarkan tinggi
-                if (bHeight > winH * 0.88) {
-                    bHeight = winH * 0.88;
-                    bWidth = bHeight / 1.45;
-                }
-
-                flipInstance = new St.PageFlip(fbElem, {
-                    width: bWidth,
-                    height: bHeight,
-                    size: "fixed",
-                    showCover: false,
-                    usePortrait: true,
-                    mobileScrollSupport: true
-                });
+                const w = window.innerWidth, h = window.innerHeight;
+                let bW = w > 800 ? 500 : w * 0.9, bH = bW * 1.45;
+                if (bH > h * 0.85) { bH = h * 0.85; bW = bH / 1.45; }
+                flipInstance = new St.PageFlip(fbElem, { width: bW, height: bH, size: "fixed", usePortrait: true });
                 flipInstance.loadFromHTML(document.querySelectorAll('.page'));
-                fbElem.style.visibility = 'visible';
             }, 300);
         }
 
-        function closeModal() {
-            document.getElementById('bookModal').style.display = 'none';
+        function closeViewer() {
+            document.getElementById('modal-viewer').style.display = 'none';
             if (flipInstance) { flipInstance.destroy(); flipInstance = null; }
         }
 
-        setTimeout(() => {
-            const splash = document.getElementById('splash');
-            splash.style.opacity = '0';
-            setTimeout(() => splash.style.display = 'none', 800);
-        }, 2500);
+        window.onload = () => {
+            setTimeout(() => {
+                const s = document.getElementById('splash-screen');
+                s.style.opacity = '0';
+                setTimeout(() => s.style.display = 'none', 800);
+            }, 1000);
+        };
     </script>
 </body>
 </html>
