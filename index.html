@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>yuDigital Indonesia - Katalog Masa Depan</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.js"></script>
@@ -21,6 +21,7 @@
             color: white;
             overflow: hidden;
             height: 100vh;
+            touch-action: none; /* Mencegah browser melakukan scroll default agar swipe kita lancar */
         }
 
         /* 1. Splash Screen */
@@ -54,36 +55,27 @@
         #main-app-container { display: none; height: 100vh; position: relative; padding-top: 80px; box-sizing: border-box; }
         .app-page { display: none; height: 100%; width: 100%; position: relative; overflow: hidden; }
 
-        /* 5. JENJANG GRID (OPTIMASI HP) */
+        /* 5. JENJANG GRID */
         .jenjang-grid {
             display: grid; 
-            grid-template-columns: repeat(2, 1fr); /* Maksa 2 kolom di HP agar muat */
+            grid-template-columns: repeat(2, 1fr);
             gap: 12px; 
             padding: 10px 5%; 
             max-width: 1000px; 
             margin: 0 auto;
-            height: calc(100vh - 160px); /* Membatasi tinggi agar tidak scroll */
+            height: calc(100vh - 160px);
             align-content: center;
         }
-        
         .jenjang-card {
-            height: 100%;
-            min-height: 120px;
-            max-height: 180px; /* Batasi tinggi kartu agar pas 1 layar */
-            border-radius: 18px; 
-            background-size: cover; 
-            background-position: center;
-            position: relative; 
-            overflow: hidden; 
-            cursor: pointer;
+            height: 100%; min-height: 120px; max-height: 180px;
+            border-radius: 18px; background-size: cover; background-position: center;
+            position: relative; overflow: hidden; cursor: pointer;
             transition: all 0.3s ease;
         }
-        .jenjang-card:hover { transform: scale(1.02); }
         .jenjang-card::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.85; z-index: 1; }
         .jenjang-info { position: absolute; bottom: 15px; left: 15px; z-index: 2; color: #1a1a1a; }
         .jenjang-info h3 { margin: 0; font-size: 1.2rem; font-weight: 800; }
 
-        /* Desktop View: Kembali ke 3 kolom jika layar lebar */
         @media (min-width: 768px) {
             .jenjang-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
             .jenjang-card { height: 180px; }
@@ -93,6 +85,7 @@
         .wheel-page-container {
             height: calc(100% - 220px); perspective: 2000px; position: relative; overflow: hidden;
             display: flex; justify-content: center; align-items: center;
+            touch-action: none; /* Penting untuk swipe di mobile */
         }
         .wheel-container {
             position: absolute; width: 100%; max-width: 450px; height: 450px;
@@ -122,7 +115,7 @@
         /* 7. Katalog Header & Footer */
         .katalog-header { text-align: center; padding: 10px 0; z-index: 10; position: relative; }
         .page-title { margin: 0; font-size: 1.1rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
-        .search-container { margin: 10px auto; width: 85%; max-width: 350px; position: relative; }
+        .search-container { margin: 10px auto; width: 85%; max-width: 350px; position: relative; z-index: 20; }
         .search-input {
             width: 100%; padding: 8px 18px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);
             background: rgba(255,255,255,0.1); color: white; outline: none; font-family: 'Poppins', sans-serif;
@@ -131,7 +124,6 @@
         .katalog-footer { position: absolute; bottom: 25px; width: 100%; text-align: center; z-index: 10; }
         .btn-back { padding: 10px 30px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white; cursor: pointer; }
 
-        /* Modal Viewer */
         .modal-viewer {
             display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.98); justify-content: center; align-items: center;
@@ -165,7 +157,7 @@
                     <input type="text" id="search-input" class="search-input" placeholder="Cari judul buku..." oninput="filterBuku()">
                 </div>
             </div>
-            <div class="wheel-page-container">
+            <div class="wheel-page-container" id="swipe-area">
                 <div class="selection-highlight"></div>
                 <div id="wheel-buku" class="wheel-container"></div>
             </div>
@@ -277,6 +269,7 @@
 
         function updateWheelPosition() {
             const wheel = document.getElementById('wheel-buku');
+            if(!wheel) return;
             wheel.style.transform = `rotateX(${currentRotation}deg)`;
             const theta = 360 / Math.max(filteredData.length, 10);
             wheel.querySelectorAll('.book-list-card').forEach((card, i) => {
@@ -287,34 +280,58 @@
             });
         }
 
-        window.addEventListener('keydown', (e) => {
-            if (currentActivePage !== 'page-katalog' || filteredData.length === 0) return;
-            const theta = 360 / Math.max(filteredData.length, 10);
-            if (e.key === "ArrowUp") currentRotation -= theta;
-            else if (e.key === "ArrowDown") currentRotation += theta;
-            else if (e.key === "Enter") {
-                const activeIdx = Math.round(-currentRotation / theta);
-                const normIdx = (activeIdx % filteredData.length + filteredData.length) % filteredData.length;
-                openViewer(filteredData[normIdx]);
-            }
-            updateWheelPosition();
-        });
+        // LOGIKA SWIPE & MOUSE GABUNGAN
+        let isMoving = false;
+        let startPos = 0;
+        const swipeArea = document.getElementById('swipe-area');
 
-        let isDragging = false, startY = 0;
-        const wheelArea = document.querySelector('.wheel-page-container');
-        wheelArea.onmousedown = (e) => { isDragging = true; startY = e.pageY; };
-        window.onmousemove = (e) => {
-            if (!isDragging || filteredData.length === 0) return;
-            currentRotation += (startY - e.pageY) * 0.3;
-            updateWheelPosition();
-            startY = e.pageY;
+        // Fungsi Mulai (Mouse & Touch)
+        const startAction = (e) => {
+            isMoving = true;
+            startPos = e.pageY || e.touches[0].pageY;
+            document.getElementById('wheel-buku').style.transition = 'none'; // Matikan transisi saat geser manual
         };
-        window.onmouseup = () => {
-            if(!isDragging) return; isDragging = false;
+
+        // Fungsi Geser (Mouse & Touch)
+        const moveAction = (e) => {
+            if (!isMoving || filteredData.length === 0) return;
+            const currentY = e.pageY || e.touches[0].pageY;
+            const diff = startPos - currentY;
+            currentRotation += diff * 0.4;
+            updateWheelPosition();
+            startPos = currentY;
+            if(e.cancelable) e.preventDefault();
+        };
+
+        // Fungsi Berhenti (Mouse & Touch)
+        const endAction = () => {
+            if (!isMoving) return;
+            isMoving = false;
+            const wheel = document.getElementById('wheel-buku');
+            wheel.style.transition = 'transform 0.4s cubic-bezier(0.23, 1, 0.32, 1)';
             const theta = 360 / Math.max(filteredData.length, 10);
             currentRotation = Math.round(currentRotation / theta) * theta;
             updateWheelPosition();
         };
+
+        // Pasang Event Listeners
+        swipeArea.addEventListener('mousedown', startAction);
+        window.addEventListener('mousemove', moveAction);
+        window.addEventListener('mouseup', endAction);
+
+        swipeArea.addEventListener('touchstart', startAction, {passive: false});
+        swipeArea.addEventListener('touchmove', moveAction, {passive: false});
+        swipeArea.addEventListener('touchend', endAction);
+
+        // Keyboard tetap jalan
+        window.addEventListener('keydown', (e) => {
+            if (currentActivePage !== 'page-katalog' || filteredData.length === 0) return;
+            const theta = 360 / Math.max(filteredData.length, 10);
+            document.getElementById('wheel-buku').style.transition = 'transform 0.4s cubic-bezier(0.23, 1, 0.32, 1)';
+            if (e.key === "ArrowUp") currentRotation -= theta;
+            else if (e.key === "ArrowDown") currentRotation += theta;
+            updateWheelPosition();
+        });
 
         let flipInstance = null;
         function openViewer(buku) {
